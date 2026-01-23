@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit datasets — {{ benchmark.title }} | VisonDF
+{% endblock %}
+
+{% block content %}
+<h1>Edit datasets for benchmark</h1>
+
+<h2>{{ benchmark.title }}</h2>
+
+<form method="post">
+  {% for ds in all_datasets %}
+    <label style="display: block;">
+      <input
+        type="checkbox"
+        name="dataset_ids"
+        value="{{ ds.id }}"
+        {% if ds.id in benchmark.datasets | map(attribute="dataset_id") | list %}
+          checked
+        {% endif %}
+      >
+      {{ ds.name }} ({{ ds.version }})
+    </label>
+  {% endfor %}
+
+  <button type="submit">Save</button>
+</form>
+{% endblock %}
+
+
+

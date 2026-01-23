@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit function — {{ fn.real_name }} | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Edit function implementation</h1>
+    <p>
+      Function ID: {{ fn.id }}<br>
+      Created at: {{ fn.created_at }}
+    </p>
+  </header>
+
+  <form method="post" class="admin-form">
+
+    <!-- Real name -->
+    <div class="form-group">
+      <label>Function name</label>
+      <input
+        type="text"
+        name="real_name"
+        value="{{ fn.real_name }}"
+        required
+      >
+    </div>
+
+    <!-- API level -->
+    <div class="form-group">
+      <label>API level</label>
+      <select name="api_level" required>
+        <option value="high" {% if fn.api_level == "high" %}selected{% endif %}>
+          High-level API
+        </option>
+        <option value="low" {% if fn.api_level == "low" %}selected{% endif %}>
+          Low-level API
+        </option>
+      </select>
+    </div>
+
+    <!-- Function family -->
+    <div class="form-group">
+      <label>Function family</label>
+      <select name="family_id" required>
+        {% for fam in families %}
+          <option
+            value="{{ fam.id }}"
+            {% if fam.id == fn.family_id %}selected{% endif %}
+          >
+            {{ fam.display_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Default dataset -->
+    <div class="form-group">
+      <label>Default dataset (for docs)</label>
+      <select name="default_dataset_id">
+        <option value="">— None —</option>
+        {% for ds in datasets %}
+          <option
+            value="{{ ds.id }}"
+            {% if fn.default_dataset_id == ds.id %}selected{% endif %}
+          >
+            {{ ds.name }} ({{ ds.version }})
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Signature HTML -->
+    <div class="form-group">
+      <label>Signature (HTML)</label>
+      <textarea
+        name="signature_html"
+        rows="4"
+      >{{ fn.signature_html or "" }}</textarea>
+    </div>
+
+    <!-- Description HTML -->
+    <div class="form-group">
+      <label>Description (HTML)</label>
+      <textarea
+        name="description_html"
+        rows="10"
+      >{{ fn.description_html or "" }}</textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="admin-actions">
+      <button type="submit">Save changes</button>
+
+      <a href="{{ url_for('admin.f_bench', function_id=fn.id) }}">
+        Edit benchmarks →
+      </a>
+    </div>
+
+  </form>
+
+</main>
+{% endblock %}
+
+
+

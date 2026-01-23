@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+Function families | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Function families</h1>
+    <p>
+      Read-only view of semantic function taxonomy.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_function_family') }}" class="admin-link">
+        + Add family
+      </a>
+      <a href="{{ url_for('admin.taxonomy') }}" class="admin-link">
+        Edit taxonomy
+      </a>
+    </div>
+  </header>
+
+  {% if families %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Display name</th>
+          <th>Slug</th>
+          <th>Description</th>
+          <th>Functions</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fam in families %}
+           <tr>
+             <td><strong>{{ fam.display_name }}</strong></td>
+             <td><code>{{ fam.slug }}</code></td>
+             <td>
+               {% if fam.description %}
+                 {{ fam.description | safe }}
+               {% else %}
+                 <em>—</em>
+               {% endif %}
+             </td>
+             <td>
+               {{ fam.id | function_family_usage_count }}
+             </td>
+             <td>
+               {{ fam.created_at.strftime("%Y-%m-%d") }}
+             </td>
+             <td>
+               <a href="{{ url_for('admin.edit_function_family', family_id=fam.id) }}">
+                 edit
+               </a>
+             </td>
+           </tr>
+         {% endfor %}      
+      </tbody>
+    </table>
+  {% else %}
+    <p>No function families defined.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+

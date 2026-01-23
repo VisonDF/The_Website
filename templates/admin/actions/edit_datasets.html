@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+Datasets | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Datasets</h1>
+    <p>Manage datasets used in benchmarks.</p>
+  </header>
+
+  <section class="admin-section">
+    <h2>Existing datasets</h2>
+  
+    {% if datasets %}
+      <ul class="dataset-list">
+        {% for ds in datasets %}
+          <li>
+            <strong>{{ ds.name }}</strong>
+            ({{ ds.version }})
+  
+            —
+            <a href="{{ ds.download_url }}" target="_blank">download</a>
+  
+            {% set usage = ds.id | dataset_usage_count %}
+  
+            {% if usage == 0 %}
+              <form
+                method="post"
+                action="{{ url_for('admin.delete_dataset', dataset_id=ds.id) }}"
+                style="display:inline"
+                onsubmit="return confirm('Delete this dataset?');"
+              >
+                <button type="submit">Delete</button>
+              </form>
+            {% else %}
+              <span class="dataset-used">
+                Used by {{ usage }} benchmark{{ 's' if usage > 1 else '' }}
+              </span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No datasets yet.</p>
+    {% endif %}
+
+  </section>
+
+</main>
+{% endblock %}
+
+
+

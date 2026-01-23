@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit benchmarks — {{ fn.real_name }} | Admin
+{% endblock %}
+
+{% block content %}
+
+<a
+  href="{{ url_for('admin.add_function_benchmark', function_id=fn.id) }}"
+  class="admin-link"
+>
+  + Add benchmark
+</a>
+
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Edit benchmark</h1>
+    <p>
+      Function:
+      <strong>{{ fn.real_name }}</strong>
+      ({{ fn.api_level }} level)
+    </p>
+  </header>
+
+  {% if benchmark %}
+    <section class="benchmark-edit-card">
+      <form method="post">
+
+        <input type="hidden" name="benchmark_id" value="{{ benchmark.id }}">
+
+        <div class="form-group">
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            value="{{ benchmark.title }}"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Benchmark description (HTML)</label>
+
+          <div class="preview-toggle">
+            <button type="button" class="toggle-btn">
+              Toggle preview
+            </button>
+          </div>
+
+          <div class="editor-preview-container">
+            <textarea
+              class="html-editor"
+              name="description_html"
+              rows="14"
+              required
+            >{{ benchmark.description_html }}</textarea>
+
+            <div class="html-preview hidden"></div>
+          </div>
+        </div>
+
+        <div class="benchmark-actions">
+          <button type="submit">Save benchmark</button>
+
+          <a
+            href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=benchmark.id) }}"
+            class="admin-link"
+          >
+            Edit datasets
+          </a>
+        </div>
+
+      </form>
+    </section>
+  {% endif %}
+
+  <footer class="admin-footer">
+    <a href="{{ url_for('admin.edit_f_impl', function_id=fn.id) }}">
+      ← Back to function
+    </a>
+  </footer>
+
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".benchmark-edit-card").forEach(card => {
+    const textarea = card.querySelector(".html-editor");
+    const preview = card.querySelector(".html-preview");
+    const toggleBtn = card.querySelector(".toggle-btn");
+
+    let previewVisible = false;
+
+    function updatePreview() {
+      preview.innerHTML = textarea.value;
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      previewVisible = !previewVisible;
+
+      textarea.style.display = previewVisible ? "none" : "block";
+      preview.classList.toggle("hidden", !previewVisible);
+
+      if (previewVisible) updatePreview();
+    });
+
+    textarea.addEventListener("input", () => {
+      if (previewVisible) updatePreview();
+    });
+  });
+});
+</script>
+
+{% endblock %}
+
+
+
+

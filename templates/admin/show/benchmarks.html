@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+Benchmarks | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+<header class="admin-header">
+  <h1>Benchmarks</h1>
+  <p>
+    Read-only view of benchmark narratives
+    (one per function implementation).
+  </p>
+
+  <p class="admin-hint">
+    <a href="{{ url_for('admin.add_function_benchmark') }}">
+      Add benchmark →
+    </a>
+  </p>
+</header>
+
+    {% if benchmarks %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>API</th>
+          <th>Benchmark title</th>
+          <th>Datasets</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bench in benchmarks %}
+          <tr>
+            <td>
+              <strong>{{ bench.function_impl.real_name }}</strong><br>
+              <small>
+                {{ bench.function_impl.family.display_name }}
+                · {{ bench.function_impl.api_level }}
+              </small>
+            </td>
+
+            <td>{{ bench.function_impl.api_level }}</td>
+
+            <td>
+              {{ bench.title }}
+            </td>
+
+            <td>
+              {% if bench.datasets %}
+                <ul class="inline-list">
+                  {% for ds in bench.datasets %}
+                    <li>
+                      {{ ds.name }} ({{ ds.version }})
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <em>—</em>
+              {% endif %}
+            </td>
+
+            <td>
+              <a href="{{ url_for('admin.edit_f_bench', function_id=bench.function_impl_id) }}">
+                edit
+              </a>
+              ·
+              <a href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=bench.id) }}">
+                datasets
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No benchmarks defined yet.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add benchmark | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Add benchmark</h1>
+  </header>
+
+  <form method="post" class="admin-form">
+
+    <div class="form-group">
+      <label>Related Function</label>
+      <input
+        type="text"
+        name="function_name"
+        placeholder=""
+        required
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label>Benchmark title</label>
+      <input
+        type="text"
+        name="title"
+        placeholder="e.g. TPC-H style group_by workload"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Benchmark description (HTML)</label>
+      <textarea
+        name="description_html"
+        rows="14"
+        placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
+        required
+      ></textarea>
+    </div>
+
+    <div class="admin-actions">
+      <button type="submit">Create benchmark</button>
+
+      <a href="{{ url_for('admin.dashboard') }}">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+
+</main>
+{% endblock %}
+
+
+

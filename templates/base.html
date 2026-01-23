@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <script>
+          (function () {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              document.documentElement.dataset.theme = theme;
+            }
+          })();
+        </script>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{% block title %}YourEngine — A dataframe engine built for control{% endblock %}</title>
+        
+        <meta
+            name="description"
+            content="A dataframe engine designed around explicit execution costs, predictability, and control."
+        />
+
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+
+    </head>
+
+    <body>
+        <!-- =========================
+       Top Navigation
+       ========================= -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="logo">
+                    <a href="{{ url_for('main.index') }}">
+                        <img
+                            src="{{ url_for('static', filename='logo_lightmode.svg') }}"
+                            alt="Engine logo"
+                            height="32"
+                            style="vertical-align: middle; margin-right: 0.5em"
+                            class="logo-img"
+                        />
+                        <span>VisonDF</span>
+                    </a>
+                </div>
+
+                <nav>
+                    <a href="{{ url_for('docs.index') }}">Docs</a>
+                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                      ☾
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        {% block content %} {% endblock %}
+
+        <script src="{{ url_for('static', filename='prism/prism.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-clike.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-c.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-cpp.min.js') }}"></script>
+        <script>
+          Prism.highlightAll();
+        </script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const rotator = document.querySelector(".code-rotator");
+          if (!rotator) return;
+        
+          const blocks = rotator.querySelectorAll(".code-block");
+          const dots = rotator.querySelectorAll(".rotator-indicator span");
+        
+          let index = 0;
+          const duration = 5000;
+        
+          function update() {
+            blocks.forEach((b, i) => b.classList.toggle("active", i === index));
+            dots.forEach((d, i) => d.classList.toggle("active", i === index));
+          }
+        
+          update();
+        
+          setInterval(() => {
+            index = (index + 1) % blocks.length;
+            update();
+          }, duration);
+        });
+        </script>
+
+        <script>
+        (() => {
+          const root = document.documentElement;
+          const btn = document.getElementById("theme-toggle");
+        
+          if (!btn) return;
+        
+          updateIcon();
+        
+          btn.addEventListener("click", () => {
+            const isDark = root.dataset.theme === "dark";
+            root.dataset.theme = isDark ? "light" : "dark";
+            localStorage.setItem("theme", root.dataset.theme);
+            updateIcon();
+          });
+        
+          function updateIcon() {
+            btn.textContent =
+              root.dataset.theme === "dark" ? "☀︎" : "⏾";
+          }
+        })();
+        </script>
+
+    </body>
+</html>
+
+
+
+

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin panel
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Admin panel</h1>
+    <p>
+      Control plane for documentation, benchmarks, datasets, and taxonomy.
+    </p>
+  </header>
+
+  <section class="container">
+      <div class="card-grid">
+
+        <!-- Taxonomy -->
+        <div class="doc-card card-variant-1">
+          <h3>Taxonomy</h3>
+          <p>
+            Reassign function implementations to semantic families.
+            Controls how documentation is structured and navigated.
+          </p>
+          <a href="{{ url_for('admin.taxonomy') }}" class="btn">
+            Edit taxonomy →
+          </a>
+        </div>
+
+        <!-- Benchmarks -->
+        <div class="doc-card card-variant-2">
+          <h3>Benchmarks</h3>
+          <p>
+            Read-only overview of benchmark narratives attached to
+            function implementations.
+          </p>
+          <a href="{{ url_for('admin.show_benchs') }}" class="btn">
+            Show benchmarks →
+          </a>
+        </div>
+
+        <!-- Benchmark datasets -->
+        <div class="doc-card card-variant-3">
+          <h3>Benchmark datasets</h3>
+          <p>
+            Inspect which datasets are used by benchmarks and manage
+            dataset associations.
+          </p>
+          <a href="{{ url_for('admin.show_datasets') }}" class="btn">
+            Show datasets →
+          </a>
+        </div>
+
+        <!-- Function implementations -->
+        <div class="doc-card card-variant-4">
+          <h3>Function implementations</h3>
+          <p>
+            Concrete implementations exposed by the engine.
+            Entry point for editing signatures, descriptions, and benchmarks.
+          </p>
+          <a href="{{ url_for('admin.show_function_impl') }}" class="btn">
+            Show functions →
+          </a>
+        </div>
+
+        <!-- Function families -->
+        <div class="doc-card card-variant-1">
+          <h3>Function families</h3>
+          <p>
+            Semantic categories used to organize functions
+            across documentation and navigation.
+          </p>
+          <a href="{{ url_for('admin.show_function_family') }}" class="btn">
+            Show families →
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+</main>
+{% endblock %}
+
+

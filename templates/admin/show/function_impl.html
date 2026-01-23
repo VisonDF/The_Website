@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+Function implementations | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Function implementations</h1>
+    <p>
+      Read-only view of all concrete function implementations.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_function_impl') }}" class="admin-link">
+        + Add function
+      </a>
+      <a href="{{ url_for('admin.taxonomy') }}" class="admin-link">
+        Edit taxonomy
+      </a>
+    </div>
+  </header>
+
+  {% if functions %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>API</th>
+          <th>Family</th>
+          <th>Default dataset</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fn in functions %}
+          <tr>
+            <td><strong>{{ fn.real_name }}</strong></td>
+            <td>{{ fn.api_level }}</td>
+            <td>
+              {{ fn.family.display_name }}
+              <br>
+              <small><code>{{ fn.family.slug }}</code></small>
+            </td>
+            <td>
+              {% if fn.default_dataset %}
+                {{ fn.default_dataset.name }}
+                ({{ fn.default_dataset.version }})
+              {% else %}
+                <em>—</em>
+              {% endif %}
+            </td>
+            <td>
+              {{ fn.created_at.strftime("%Y-%m-%d") }}
+            </td>
+            <td>
+              <a href="{{ url_for('admin.edit_function_impl', function_id=fn.id) }}">
+                edit
+              </a>
+              ·
+              <a href="{{ url_for('admin.f_bench', function_id=fn.id) }}">
+                benchmarks
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No function implementations defined.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+

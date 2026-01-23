@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage function families | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Function families</h1>
+    <p>Semantic taxonomy for functions.</p>
+  </header>
+
+  <section class="admin-section">
+    <h2>Add family</h2>
+
+    <form method="post">
+      <div class="form-group">
+        <label>Slug</label>
+        <input name="slug" required placeholder="group_by">
+      </div>
+
+      <div class="form-group">
+        <label>Display name</label>
+        <input name="display_name" required placeholder="Group by">
+      </div>
+
+      <div class="form-group">
+        <label>Description (HTML)</label>
+        <textarea name="description" rows="4"></textarea>
+      </div>
+
+      <button type="submit">Create family</button>
+    </form>
+  </section>
+
+</main>
+{% endblock %}
+
+
+

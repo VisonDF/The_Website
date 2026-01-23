@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+Function taxonomy | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Function taxonomy</h1>
+    <p>
+      Reassign function implementations to semantic families.
+    </p>
+  </header>
+
+  <form method="post">
+
+    {% for family in families %}
+      <section class="family-group">
+
+        <h2>{{ family.display_name }}</h2>
+        <p class="family-meta">
+          slug: <code>{{ family.slug }}</code>
+        </p>
+
+        {% set functions = grouped_functions.get(family.id, []) %}
+
+        {% if functions %}
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>API</th>
+                <th>Family</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for fn in functions %}
+                <tr>
+                  <td>
+                    <strong>{{ fn.real_name }}</strong>
+                  </td>
+                  <td>
+                    {{ fn.api_level }}
+                  </td>
+                  <td>
+                    <select name="family_{{ fn.id }}">
+                      {% for fam in families %}
+                        <option
+                          value="{{ fam.id }}"
+                          {% if fam.id == fn.family_id %}selected{% endif %}
+                        >
+                          {{ fam.display_name }} ({{ fam.slug }})
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="empty-state">
+            No functions in this family.
+          </p>
+        {% endif %}
+
+      </section>
+    {% endfor %}
+
+    <div class="admin-actions">
+      <button type="submit">Save taxonomy changes</button>
+    </div>
+
+  </form>
+
+</main>
+{% endblock %}
+
+
+

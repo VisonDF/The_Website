@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+Datasets | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Datasets</h1>
+    <p>
+      Read-only view of datasets used in benchmarks.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_datasets') }}" class="admin-link">
+        + Add dataset
+      </a>
+      <a href="{{ url_for('admin.edit_datasets') }}" class="admin-link">
+        Edit / delete datasets
+      </a>
+    </div>
+  </header>
+
+  {% if datasets %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Version</th>
+          <th>Description</th>
+          <th>Usage</th>
+          <th>File</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ds in datasets %}
+          <tr>
+            <td><strong>{{ ds.name }}</strong></td>
+            <td>{{ ds.version }}</td>
+            <td>
+              {% if ds.description %}
+                {{ ds.description | safe }}
+              {% else %}
+                <em>—</em>
+              {% endif %}
+            </td>
+            <td>
+              {% set usage = ds.id | dataset_usage_count %}
+              {{ usage }} benchmark{{ 's' if usage != 1 else '' }}
+            </td>
+            <td>
+              {% if ds.download_url %}
+                <a href="{{ ds.download_url }}" target="_blank">
+                  download
+                </a>
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {{ ds.created_at.strftime("%Y-%m-%d") }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No datasets available.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+

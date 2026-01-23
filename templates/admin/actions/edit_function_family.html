@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit family — {{ family.display_name }} | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Edit function family</h1>
+  </header>
+
+  <form method="post" class="admin-form">
+
+    <div class="form-group">
+      <label>Slug</label>
+      <input name="slug" value="{{ family.slug }}" required>
+    </div>
+
+    <div class="form-group">
+      <label>Display name</label>
+      <input name="display_name" value="{{ family.display_name }}" required>
+    </div>
+
+    <div class="form-group">
+      <label>Description (HTML)</label>
+      <textarea name="description" rows="6">{{ family.description or "" }}</textarea>
+    </div>
+
+    <div class="admin-actions">
+      <button type="submit">Save changes</button>
+
+      <form
+        method="post"
+        action="{{ url_for('admin.delete_function_family', family_id=family.id) }}"
+        onsubmit="return confirm('Delete this family? This cannot be undone.');"
+        style="display:inline"
+      >
+        <button type="submit" class="danger">Delete family</button>
+      </form>
+
+      <a href="{{ url_for('admin.manage_function_families') }}">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+
+</main>
+{% endblock %}
+
+
+
+
+
