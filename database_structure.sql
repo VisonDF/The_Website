@@ -11,7 +11,10 @@
 -- DATASET
 -- Canonical datasets used across docs/benchmarks
 -- -----------------------------------------
-CREATE TABLE dataset (
+
+CREATE DATABASE IF NOT EXISTS df_engine_site;
+
+CREATE TABLE IF NOT EXISTS dataset (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     name          VARCHAR(128) NOT NULL,
     version       VARCHAR(32)  NOT NULL,
@@ -26,7 +29,7 @@ CREATE TABLE dataset (
 -- Semantic purpose/category (group_by, pivot, scan...)
 -- Powers cards + navigation
 -- -----------------------------------------
-CREATE TABLE function_family (
+CREATE TABLE IF NOT EXISTS function_family (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     slug          VARCHAR(64)  NOT NULL,
     display_name  VARCHAR(128) NOT NULL,
@@ -41,7 +44,7 @@ CREATE TABLE function_family (
 -- api_level says "high" or "low"
 -- default_dataset_id is the dataset you want shown by default on the doc page
 -- -----------------------------------------
-CREATE TABLE function_impl (
+CREATE TABLE IF NOT EXISTS function_impl (
     id                  INT AUTO_INCREMENT PRIMARY KEY,
     family_id           INT NOT NULL,
 
@@ -78,7 +81,7 @@ CREATE TABLE function_impl (
 -- dataset_id lets you keep everything aligned to the canonical dataset,
 -- but allows alternative datasets when needed.
 -- -----------------------------------------
-CREATE TABLE benchmark (
+CREATE TABLE IF NOT EXISTS benchmark (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     function_impl_id  INT NOT NULL,
 
@@ -88,8 +91,7 @@ CREATE TABLE benchmark (
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     KEY idx_bench_impl (function_impl_id),
-
-    UNIQUE KEY uq_benchmark_function (function_impl_id);
+    UNIQUE KEY uq_benchmark_function (function_impl_id),
 
     CONSTRAINT fk_bench_impl
         FOREIGN KEY (function_impl_id)
@@ -97,7 +99,7 @@ CREATE TABLE benchmark (
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE benchmark_dataset (
+CREATE TABLE IF NOT EXISTS benchmark_dataset (
     benchmark_id  INT NOT NULL,
     dataset_id    INT NOT NULL,
 
@@ -119,7 +121,7 @@ CREATE TABLE benchmark_dataset (
 -- GET STARTED
 -- Minimal curated entry points into the docs
 -- -----------------------------------------
-CREATE TABLE get_started (
+CREATE TABLE IF NOT EXISTS get_started (
     id                INT AUTO_INCREMENT PRIMARY KEY,
 
     function_impl_id  INT NOT NULL,
@@ -137,8 +139,31 @@ CREATE TABLE get_started (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================================
--- END
+-- ADMIN USER
+-- Authentication table for admin access
 -- =========================================
+
+CREATE TABLE IF NOT EXISTS admin_user (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    username      VARCHAR(64)  NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY uq_admin_username (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS dev (
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    title             VARCHAR(256) NOT NULL,
+    description_html  LONGTEXT NOT NULL,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
 
 
 

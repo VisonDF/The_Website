@@ -59,12 +59,28 @@
 
         {% block content %} {% endblock %}
 
+        {% if current_user.is_authenticated %}
+          <div class="admin-float-panel">
+            <a href="{{ url_for('admin.dashboard') }}">
+              ⚙ Admin panel
+            </a>
+             | 
+            <a href="{{ url_for('auth.logout') }}">
+              Logout
+            </a>
+          </div>
+        {% endif %}
+
         <script src="{{ url_for('static', filename='prism/prism.min.js') }}"></script>
         <script src="{{ url_for('static', filename='prism/components/prism-clike.min.js') }}"></script>
         <script src="{{ url_for('static', filename='prism/components/prism-c.min.js') }}"></script>
         <script src="{{ url_for('static', filename='prism/components/prism-cpp.min.js') }}"></script>
         <script>
           Prism.highlightAll();
+        </script>
+
+        <script type="module"
+                src="{{ url_for('static', filename='js/editor.bundle.js') }}">
         </script>
 
         <script>
@@ -90,6 +106,42 @@
             update();
           }, duration);
         });
+        </script>
+
+        <script>
+        function updatePreview() {
+          if (!window.cmView) return;
+        
+          const preview = document.getElementById("description-preview");
+          if (!preview) return;
+        
+          preview.innerHTML = window.cmView.state.doc.toString();
+        }
+        
+        function togglePreview() {
+          const preview = document.getElementById("description-preview");
+          if (!preview) return;
+        
+          const isVisible = !preview.hasAttribute("hidden");
+        
+          if (isVisible) {
+            preview.setAttribute("hidden", "");
+          } else {
+            updatePreview();
+            preview.removeAttribute("hidden");
+          }
+        }
+        </script>
+
+        <script>
+        function updateFileName(input) {
+          const label = document.getElementById("dataset-file-name");
+          if (input.files && input.files.length > 0) {
+            label.textContent = input.files[0].name;
+          } else {
+            label.textContent = "No file selected";
+          }
+        }
         </script>
 
         <script>

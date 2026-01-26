@@ -1,52 +1,10 @@
-<!doctype html>
-<html lang="en">
-    <head>
+{% extends "base.html" %}
 
-        <script>
-          (function () {
-            const theme = localStorage.getItem("theme");
-            if (theme) {
-              document.documentElement.dataset.theme = theme;
-            }
-          })();
-        </script>
+{% block title %}
+Admin panel
+{% endblock %}
 
-        <meta charset="UTF-8" />
-        <title>Choose Your API</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../../css/style.css" />
-        <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" />
-    </head>
-    <body>
-        <!-- =========================
-       Top Navigation
-       ========================= -->
-
-        <header class="topbar">
-            <div class="topbar-inner">
-                <div class="logo">
-                    <a href="../index.html">
-                        <img
-                            src="../../assets/logo_lightmode.svg"
-                            alt="Engine logo"
-                            height="32"
-                            style="vertical-align: middle; margin-right: 0.5em"
-                            class="logo-img"
-                        />
-                        <span>VisonDF</span>
-                    </a>
-                </div>
-
-                <nav>
-                    <a href="index_docs.html">Docs</a>
-                    <a href="../architecture/architecture.html">Architecture</a>
-                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
-                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                      ☾
-                    </button>
-                </nav>
-            </div>
-        </header>
+{% block content %}
 
         <!-- ================================
      Hero
@@ -89,7 +47,7 @@
                     <div class="hero-actions">
                         <a
                             class="btn primary"
-                            href="doc_cards.html"
+                            href="{{ url_for('docs.show_families', lvl='high') }}"
                         >
                             Enter High-Level API →
                         </a>
@@ -120,7 +78,7 @@
                     <div class="hero-actions">
                         <a
                             class="btn"
-                            href="doc_cards.html"
+                            href="{{ url_for('docs.show_families', lvl='low') }}"
                         >
                             Enter Low-Level API →
                         </a>
@@ -143,33 +101,7 @@
         </section>
         <br/>
 
-
-        <script>
-        (() => {
-          const root = document.documentElement;
-          const btn = document.getElementById("theme-toggle");
-        
-          if (!btn) return;
-        
-          updateIcon();
-        
-          btn.addEventListener("click", () => {
-            const isDark = root.dataset.theme === "dark";
-            root.dataset.theme = isDark ? "light" : "dark";
-            localStorage.setItem("theme", root.dataset.theme);
-            updateIcon();
-          });
-        
-          function updateIcon() {
-            btn.textContent =
-              root.dataset.theme === "dark" ? "☀︎" : "⏾";
-          }
-        })();
-        </script>
-
-    </body>
-</html>
-
+{% endblock %}
 
 
 

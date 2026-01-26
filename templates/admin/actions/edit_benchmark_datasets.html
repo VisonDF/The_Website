@@ -4,28 +4,75 @@
 Edit datasets — {{ benchmark.title }} | VisonDF
 {% endblock %}
 
+
 {% block content %}
+
+<section class="container">
+
+
 <h1>Edit datasets for benchmark</h1>
 
 <h2>{{ benchmark.title }}</h2>
 
-<form method="post">
-  {% for ds in all_datasets %}
-    <label style="display: block;">
-      <input
-        type="checkbox"
-        name="dataset_ids"
-        value="{{ ds.id }}"
-        {% if ds.id in benchmark.datasets | map(attribute="dataset_id") | list %}
-          checked
-        {% endif %}
-      >
-      {{ ds.name }} ({{ ds.version }})
-    </label>
-  {% endfor %}
+<form method="post" class="admin-form admin-form-wide">
 
-  <button type="submit">Save</button>
+  <!-- =========================
+       Dataset selection
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Datasets used by this benchmark</legend>
+
+    <p class="form-hint">
+      Select the datasets referenced by this benchmark narrative.
+      These will be available for download on the documentation page.
+    </p>
+
+    <div class="checkbox-list">
+
+      {% for ds in all_datasets %}
+        <label class="checkbox-item">
+          <input
+            type="checkbox"
+            name="dataset_ids"
+            value="{{ ds.id }}"
+            {% if ds.id in benchmark.datasets | map(attribute="id") | list %}
+              checked
+            {% endif %}
+          >
+          <span class="checkbox-label">
+            <strong>{{ ds.name }}</strong>
+            <span class="checkbox-meta">
+              {{ ds.version }}
+            </span>
+          </span>
+        </label>
+      {% endfor %}
+
+      {% if not all_datasets %}
+        <p><em>No datasets available.</em></p>
+      {% endif %}
+
+    </div>
+  </fieldset>
+
+  <!-- =========================
+       Actions
+       ========================= -->
+  <div class="admin-actions admin-actions-sticky">
+    <button type="submit" class="btn-primary">
+      Save datasets
+    </button>
+
+    <a
+      href="{{ url_for('admin.show_benchs', function_id=benchmark.function_impl_id) }}"
+      class="btn-link"
+    >
+      Back to benchmark
+    </a>
+  </div>
+
 </form>
+</section>
 {% endblock %}
 
 

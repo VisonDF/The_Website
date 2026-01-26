@@ -16,7 +16,7 @@ Benchmarks | Admin
 
   <p class="admin-hint">
     <a href="{{ url_for('admin.add_function_benchmark') }}">
-      Add benchmark →
+      + Add benchmark
     </a>
   </p>
 </header>
@@ -64,7 +64,7 @@ Benchmarks | Admin
             </td>
 
             <td>
-              <a href="{{ url_for('admin.edit_f_bench', function_id=bench.function_impl_id) }}">
+              <a href="{{ url_for('admin.edit_bench', function_id=bench.function_impl_id) }}">
                 edit
               </a>
               ·

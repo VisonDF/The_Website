@@ -16,7 +16,7 @@ Function implementations | Admin
     <div class="admin-header-actions">
       <a href="{{ url_for('admin.add_function_impl') }}" class="admin-link">
         + Add function
-      </a>
+      </a> - 
       <a href="{{ url_for('admin.taxonomy') }}" class="admin-link">
         Edit taxonomy
       </a>
@@ -37,7 +37,7 @@ Function implementations | Admin
       </thead>
       <tbody>
         {% for fn in functions %}
-          <tr>
+          <tr class="admin-table">
             <td><strong>{{ fn.real_name }}</strong></td>
             <td>{{ fn.api_level }}</td>
             <td>
@@ -61,7 +61,7 @@ Function implementations | Admin
                 edit
               </a>
               ·
-              <a href="{{ url_for('admin.f_bench', function_id=fn.id) }}">
+              <a href="{{ url_for('admin.edit_bench', function_id=fn.id) }}">
                 benchmarks
               </a>
             </td>

@@ -34,7 +34,7 @@
                 <a class="btn" href="https://github.com/visonDF/visonDF">GitHub</a>
               </div>
        
-            <a href="docs/index_docs.html" class="code-rotator-link">
+              <a href="{{ url_for('docs.index') }}" class="code-rotator-link">
               <div class="code-rotator">
             
                 <pre class="code-block active">
@@ -102,10 +102,15 @@
        ========================= -->
         <section id="development">
             <h2>Development</h2>
-            <p>Roadmap, contribution guidelines, and internal principles.</p>
-            <a href="dev/dev.html">Development section →</a>
+            <p>
+            Roadmap and Deep dive into the engine’s development. 
+            </p>
+            <a href="dev">Development section →</a>
         </section>
 
 {% endblock %}
+
+
+
 
 

@@ -11,18 +11,41 @@ Add benchmark | Admin
     <h1>Add benchmark</h1>
   </header>
 
-  <form method="post" class="admin-form">
+<form method="post" class="admin-form admin-form-wide">
+
+  <!-- =========================
+       Benchmark identity
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Benchmark metadata</legend>
 
     <div class="form-group">
-      <label>Related Function</label>
-      <input
-        type="text"
-        name="function_name"
-        placeholder=""
+      <label>Related function implementation</label>
+    
+      <select
+        name="function_impl_id"
         required
       >
+        <option value="">
+          — Select a function implementation —
+        </option>
+    
+        {% for fn in functions %}
+          <option value="{{ fn.id }}">
+            {{ fn.real_name }}
+            · {{ fn.family.display_name }}
+            · {{ fn.api_level }}
+          </option>
+        {% endfor %}
+      </select>
+    
+      <small class="form-hint">
+        Only function implementations without an existing benchmark are listed.
+      </small>
+    </div>      <small class="form-hint">
+        Must match an existing function implementation name.
+      </small>
     </div>
-
 
     <div class="form-group">
       <label>Benchmark title</label>
@@ -33,26 +56,66 @@ Add benchmark | Admin
         required
       >
     </div>
+  </fieldset>
+
+  <!-- =========================
+       Benchmark narrative
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Benchmark description</legend>
 
     <div class="form-group">
-      <label>Benchmark description (HTML)</label>
-      <textarea
-        name="description_html"
-        rows="14"
-        placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
-        required
-      ></textarea>
+      <label>
+        Description (HTML)
+        <button
+          type="button"
+          class="preview-toggle"
+          onclick="togglePreview()"
+        >
+          Preview
+        </button>
+      </label>
+
+      <div class="editor-preview-wrapper">
+
+        <textarea
+          id="description-editor"
+          name="description_html"
+          class="code-textarea code-textarea-large"
+          placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
+          oninput="updatePreview()"
+          required
+        ></textarea>
+
+        <div
+          id="description-preview"
+          class="html-preview"
+          hidden
+        ></div>
+
+      </div>
+
+      <small class="form-hint">
+        This HTML is rendered verbatim on the documentation page.
+      </small>
     </div>
+  </fieldset>
 
-    <div class="admin-actions">
-      <button type="submit">Create benchmark</button>
+  <!-- =========================
+       Actions
+       ========================= -->
+  <div class="admin-actions admin-actions-sticky">
+    <button type="submit" class="btn-primary">
+      Create benchmark
+    </button>
 
-      <a href="{{ url_for('admin.dashboard') }}">
-        Cancel
-      </a>
-    </div>
+    <a href="{{ url_for('admin.show_benchs') }}" class="btn-link">
+      Cancel
+    </a>
+  </div>
 
-  </form>
+</form>
+
 
 </main>
 {% endblock %}

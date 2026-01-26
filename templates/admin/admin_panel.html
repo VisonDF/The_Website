@@ -15,6 +15,7 @@ Admin panel
   </header>
 
   <section class="container">
+
       <div class="card-grid">
 
         <!-- Taxonomy -->
@@ -43,7 +44,7 @@ Admin panel
 
         <!-- Benchmark datasets -->
         <div class="doc-card card-variant-3">
-          <h3>Benchmark datasets</h3>
+          <h3>Datasets</h3>
           <p>
             Inspect which datasets are used by benchmarks and manage
             dataset associations.
@@ -74,6 +75,16 @@ Admin panel
           </p>
           <a href="{{ url_for('admin.show_function_family') }}" class="btn">
             Show families →
+          </a>
+        </div>
+
+        <div class="doc-card card-variant-2">
+          <h3>Developpment</h3>
+          <p>
+            Deep dives into the engine’s development: design choices, performance trade-offs, and the reasoning behind the architecture.          
+          </p>
+          <a href="{{ url_for('admin.show_dev') }}" class="btn">
+            Show Dev →
           </a>
         </div>
 

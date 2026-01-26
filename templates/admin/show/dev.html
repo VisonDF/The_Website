@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dev | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Dev Articles</h1>
+    <p>
+      Read-only view of all dev articles.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_dev') }}" class="admin-link">
+        + Add Dev Article
+      </a> 
+    </div>
+  </header>
+
+  {% if articles %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for article in articles %}
+          <tr class="admin-table">
+            <td><strong>{{ article.title }}</strong></td>
+            <td>
+              {{ article.created_at.strftime("%Y-%m-%d") }}
+            </td>
+            <td>
+              <a href="{{ url_for('admin.edit_dev', article_id=article.id) }}">
+                edit
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No Dev Article.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+

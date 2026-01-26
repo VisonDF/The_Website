@@ -1,264 +1,104 @@
-<!doctype html>
-<html lang="en">
-    <head>
+{% extends "base.html" %}
 
-        <script>
-          (function () {
-            const theme = localStorage.getItem("theme");
-            if (theme) {
-              document.documentElement.dataset.theme = theme;
-            }
-          })();
-        </script>
+{% block title %}
+Admin panel
+{% endblock %}
 
-        <meta charset="UTF-8" />
-        <title>Low-Level Overview — VisonDF</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../../../css/style.css" />
-        <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml" />
-    </head>
-    <body>
-        
-        <!-- Topbar -->
-        <header class="topbar">
-            <div class="topbar-inner">
-                <div class="logo">
-                    <a href="../../index.html">
-                        <img
-                            src="../../../assets/logo_lightmode.svg"
-                            alt="Engine logo"
-                            height="32"
-                            style="vertical-align: middle; margin-right: 0.5em"
-                            class="logo-img"
-                        />
-                        <span>VisonDF</span>
-                    </a>
-                </div>
-
-                <nav>
-                    <a href="../index_docs.html">Docs</a>
-                    <a href="../../architecture/architecture.html">Architecture</a>
-                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
-                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                      ☾
-                    </button>
-                </nav>
-            </div>
-        </header>
-
+{% block content %}
 
         <!-- Hero -->
         <section class="hero">
+            {% if lvl == 'high' %}
+            <h1>Welcome to VisonDF High-Level API Documentation</h1>
+            <select id="api-level-select" class="admin-select">
+              <option value="high" selected>High-level API</option>
+              <option value="low">Low-level API</option>
+            </select>
+            {% else %}
             <h1>Welcome to VisonDF Low-Level API Documentation</h1>
-            <p>Pick a section below.</p>
+            <select id="api-level-select" class="admin-select">
+              <option value="high">High-level API</option>
+              <option value="low" selected>Low-level API</option>
+            </select>
+            {% endif %}
+
+
+            {% if not family %}
+                <p>Pick a function family below.</p>
+            {% else %}
+                <p>Pick a function below.</p>
+            {% endif %}
         </section>
 
         <!-- Card Grid -->
         <section class="container">
             <div class="card-grid">
 
-                <div class="doc-card card-variant-1">
-                    <h3>.read_csv()</h3>
-                    <p>
-                    Learn how to read <code>csv</code> files.
-                    </p>
-                    <a class="btn" href="read_csv.html">Go! →</a>
-                </div>
+                {% if not family %}
 
-                <div class="doc-card card-variant-2">
-                    <h3>.read_pq()</h3>
-                    <p>
-                    Learn how to read <code>Parquet</code> files.
-                    </p>
-                    <a class="btn" href="read_pq.html">Go! →</a>
-                </div>
+                    {% for card in cards %}
+                        
+                        {% set variant = (loop.index0 % 4) + 1 %}
+                        
+                        <div class="doc-card card-variant-{{ variant }}">
+                            <h3>{{ card.display_name }}</h3>
+                            <p>
+                            {{ card.description }}
+                            </p>
+                            <a class="btn" href="{{ url_for('docs.show_functions', 
+                                                             lvl=lvl, 
+                                                             slug=card.slug) }}">Go! →</a>
+                        </div>
+                    {% endfor %}
 
-                <div class="doc-card card-variant-1">
-                    <h3>.write_csv()</h3>
-                    <p>
-                    Learn how to write <code>csv</code> files.
-                    </p>
-                    <a class="btn" href="write_csv.html">Go! →</a>
-                </div>
+                {% else %}
 
-                <div class="doc-card card-variant-2">
-                    <h3>.write_pq()</h3>
-                    <p>
-                    Learn how to write <code>Parquet</code> files.
-                    </p>
-                    <a class="btn" href="write_pq.html">Go! →</a>
-                </div>
+                    {% for card in cards %}
 
-                <div class="doc-card card-variant-2">
-                    <h3>.display()</h3>
-                    <p>
-                        Learn how to dispay your precious data.
-                    </p>
-                    <a class="btn" href="display.html">Go! →</a>
-                </div>
+                        {% set variant = (loop.index0 % 4) + 1 %}
 
-                <div class="doc-card card-variant-3">
-                    <h3>.add_col()</h3>
-                    <p>
-                        Learn how to add columns.    
-                    </p>
-                    <a class="btn" href="add_col.html">Go! →</a>
-                </div>
+                        <div class="doc-card card-variant-{{ variant }}">
+                            <h3>{{ card.real_name }}</h3>
+                            <p>
+                            {{ card.description_html | safe }}
+                            </p>
+                            <a class="btn" href="{{ url_for('docs.function_doc', 
+                                                             function_id=card.id) }}">Go! →</a>
+                        </div>
 
-                <div class="doc-card card-variant-4">
-                    <h3>.rm_col()</h3>
-                    <p>
-                        Learn how to remove columns. 
-                    </p>
-                    <a class="btn" href="rm_col.html">Go! →</a>
-                </div>
+                    {% endfor %}
 
-                <div class="doc-card card-variant-2">
-                    <h3>.rep_col()</h3>
-                    <p>
-                        Learn how to replace columns. 
-                    </p>
-                    <a class="btn" href="rep_col.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-1">
-                    <h3>.add_row()</h3>
-                    <p>
-                        Learn how to add rows. 
-                    </p>
-                    <a class="btn" href="add_row.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-2">
-                    <h3>.rm_row()</h3>
-                    <p>
-                        Learn how to remove rows, <code>lazy</code> and <code>hard</code> way ! 
-                    </p>
-                    <a class="btn" href="rm_row.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-2">
-                    <h3>.rep_row()</h3>
-                    <p>
-                        Learn how to replace row. 
-                    </p>
-                    <a class="btn" href="rm_row.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-3">
-                    <h3>.concat()</h3>
-                    <p>
-                    Learn how to concatenate dataframes by row. 
-                    </p>
-                    <a class="btn" href="rm_row.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-4">
-                    <h3>.fapply()</h3>
-                    <p>
-                    Apply custom functions over a columns
-                    </p>
-                    <a class="btn" href="rm_row.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-1">
-                    <h3>.get_col()</h3>
-                    <p>
-                    Learn how to get a column from a dataframe with row mask filtering and more...
-                    </p>
-                    <a class="btn" href="get_col.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-2">
-                    <h3>.copy_df()</h3>
-                    <p>
-                    Learn how to copy dataframe with row and col mask filtering and more...
-                    </p>
-                    <a class="btn" href="copy_df.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-2">
-                    <h3>.mapcol()</h3>
-                    <p>
-                    Pay the cost once and get speed gains over the rest of the data pipeline !
-                    </p>
-                    <a class="btn" href="mapcol.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-3">
-                    <h3>.unmaterialize()</h3>
-                    <p>
-                    Going <code>view_mode</code>
-                    </p>
-                    <a class="btn" href="unmaterialize.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-4">
-                    <h3>.materialize()</h3>
-                    <p>
-                    Returning to <code>default_mode</code>
-                    </p>
-                    <a class="btn" href="materialize.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-1">
-                    <h3>.merge()</h3>
-                    <p>
-                    Learn how to merge dataframes.
-                    </p>
-                    <a class="btn" href="merge.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-2">
-                    <h3>.one_to_many_join()</h3>
-                    <p>
-                    Perform a <code>one_to_many_join</code>.
-                    </p>
-                    <a class="btn" href="otm.html">Go! →</a>
-                </div>
-
-                <div class="doc-card card-variant-3">
-                    <h3>.pivot()</h3>
-                    <p>
-                    Learn how to pivot a datafame.
-                    </p>
-                    <a class="btn" href="pivot.html">Go! →</a>
-                </div>
-
-
+                {% endif %}
 
             </div>
         </section>
 
-        <br style="margin-top:1cm">
+        <br>
 
         <script>
-        (() => {
-          const root = document.documentElement;
-          const btn = document.getElementById("theme-toggle");
+          {% if not family %}
+            document.getElementById("api-level-select")
+              .addEventListener("change", (e) => {
+                const level = e.target.value;
+                if (!level) return;
         
-          if (!btn) return;
+                // Redirect to your docs route
+                window.location.href = `/docs/${level}`;
+              });
+          {% else %}
+            const family = "{{ family }}"
+            document.getElementById("api-level-select")
+              .addEventListener("change", (e) => {
+                const level = e.target.value;
+                if (!level) return;
         
-          updateIcon();
-        
-          btn.addEventListener("click", () => {
-            const isDark = root.dataset.theme === "dark";
-            root.dataset.theme = isDark ? "light" : "dark";
-            localStorage.setItem("theme", root.dataset.theme);
-            updateIcon();
-          });
-        
-          function updateIcon() {
-            btn.textContent =
-              root.dataset.theme === "dark" ? "☀︎" : "⏾";
-          }
-        })();
+                // Redirect to your docs route
+                  window.location.href = `/docs/${level}+${ family }`;
+              });
+          {% endif %}
         </script>
 
-    </body>
-</html>
-
-
+{% endblock %}
 
 
 

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Dev | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Edit Dev</h1>
+  </header>
+
+<form method="post" class="admin-form admin-form-wide">
+
+  <fieldset class="form-section">
+    <legend>Title</legend>
+
+    <div class="form-group">
+      <input
+        type="text"
+        name="title"
+        value="{{ title }}"
+        required
+      >
+    </div>
+  </fieldset>
+
+  <fieldset class="form-section">
+    <legend>Description</legend>
+
+    <div class="form-group">
+      <label>
+        Description (HTML)
+        <button
+          type="button"
+          class="preview-toggle"
+          onclick="togglePreview()"
+        >
+          Preview
+        </button>
+      </label>
+
+      <div class="editor-preview-wrapper">
+
+        <textarea
+          id="description-editor"
+          name="description_html"
+          class="code-textarea code-textarea-large"
+          placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
+          oninput="updatePreview()"
+          required
+          >{{ description_html }}</textarea>
+
+        <div
+          id="description-preview"
+          class="html-preview"
+          hidden
+        ></div>
+
+      </div>
+
+      <small class="form-hint">
+        This HTML is rendered verbatim on the documentation page.
+      </small>
+    </div>
+  </fieldset>
+
+  <!-- =========================
+       Actions
+       ========================= -->
+  <div class="admin-actions admin-actions-sticky">
+    <button type="submit" class="btn-primary">
+      Save Changes
+    </button>
+
+    <a href="{{ url_for('admin.show_dev') }}" class="btn-link">
+      Cancel
+    </a>
+  </div>
+
+</form>
+
+
+</main>
+{% endblock %}
+
+
+

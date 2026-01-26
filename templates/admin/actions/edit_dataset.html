@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit dataset — {{ dataset.name }} | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Edit dataset</h1>
+    <p>
+      Dataset ID: {{ dataset.id }}<br>
+      File: <code>{{ dataset.download_url }}</code>
+    </p>
+  </header>
+
+  <form method="post" class="admin-form admin-form-wide">
+
+    <fieldset class="form-section">
+      <legend>Dataset metadata</legend>
+
+      <div class="form-group">
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          value="{{ dataset.name }}"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Version</label>
+        <input
+          type="text"
+          name="version"
+          value="{{ dataset.version }}"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Description (HTML)</label>
+        <textarea
+          name="description"
+          rows="6"
+        >{{ dataset.description or "" }}</textarea>
+      </div>
+    </fieldset>
+
+    <div class="admin-actions admin-actions-sticky">
+      <button type="submit" class="btn-primary">
+        Save changes
+      </button>
+
+      <a href="{{ url_for('admin.edit_datasets') }}" class="btn-link">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+
+</main>
+{% endblock %}

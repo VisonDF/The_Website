@@ -15,9 +15,14 @@ Edit function — {{ fn.real_name }} | Admin
     </p>
   </header>
 
-  <form method="post" class="admin-form">
+<form method="post" class="admin-form admin-form-wide">
 
-    <!-- Real name -->
+  <!-- =========================
+       Identity
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Identity</legend>
+
     <div class="form-group">
       <label>Function name</label>
       <input
@@ -28,37 +33,43 @@ Edit function — {{ fn.real_name }} | Admin
       >
     </div>
 
-    <!-- API level -->
-    <div class="form-group">
-      <label>API level</label>
-      <select name="api_level" required>
-        <option value="high" {% if fn.api_level == "high" %}selected{% endif %}>
-          High-level API
-        </option>
-        <option value="low" {% if fn.api_level == "low" %}selected{% endif %}>
-          Low-level API
-        </option>
-      </select>
-    </div>
-
-    <!-- Function family -->
-    <div class="form-group">
-      <label>Function family</label>
-      <select name="family_id" required>
-        {% for fam in families %}
-          <option
-            value="{{ fam.id }}"
-            {% if fam.id == fn.family_id %}selected{% endif %}
-          >
-            {{ fam.display_name }}
+    <div class="form-row">
+      <div class="form-group">
+        <label>API level</label>
+        <select name="api_level" required>
+          <option value="high" {% if fn.api_level == "high" %}selected{% endif %}>
+            High-level API
           </option>
-        {% endfor %}
-      </select>
-    </div>
+          <option value="low" {% if fn.api_level == "low" %}selected{% endif %}>
+            Low-level API
+          </option>
+        </select>
+      </div>
 
-    <!-- Default dataset -->
+      <div class="form-group">
+        <label>Function family</label>
+        <select name="family_id" required>
+          {% for fam in families %}
+            <option
+              value="{{ fam.id }}"
+              {% if fam.id == fn.family_id %}selected{% endif %}
+            >
+              {{ fam.display_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- =========================
+       Documentation defaults
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Documentation</legend>
+
     <div class="form-group">
-      <label>Default dataset (for docs)</label>
+      <label>Default dataset</label>
       <select name="default_dataset_id">
         <option value="">— None —</option>
         {% for ds in datasets %}
@@ -70,36 +81,111 @@ Edit function — {{ fn.real_name }} | Admin
           </option>
         {% endfor %}
       </select>
+      <small class="form-hint">
+        Used as the default dataset shown on documentation pages.
+      </small>
     </div>
+  </fieldset>
 
-    <!-- Signature HTML -->
+  <!-- =========================
+       Signature
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Signature</legend>
+
     <div class="form-group">
       <label>Signature (HTML)</label>
       <textarea
+        id="signature-editor"
         name="signature_html"
+        class="code-textarea"
         rows="4"
       >{{ fn.signature_html or "" }}</textarea>
     </div>
 
-    <!-- Description HTML -->
+  <!-- =========================
+       Description + preview
+       ========================= -->
+
     <div class="form-group">
-      <label>Description (HTML)</label>
-      <textarea
-        name="description_html"
-        rows="10"
-      >{{ fn.description_html or "" }}</textarea>
+      <label>
+        Description (HTML)
+        <button
+          type="button"
+          class="preview-toggle"
+          onclick="togglePreview()"
+        >
+          Preview
+        </button>
+      </label>
+
+      <div class="editor-preview-wrapper">
+        <textarea
+          id="description-editor"
+          name="description_html"
+          class="code-textarea code-textarea-large"
+          oninput="updatePreview()"
+        >{{ fn.description_html or "" }}</textarea>
+
+        <div
+          id="description-preview"
+          class="html-preview"
+          hidden
+        ></div>
+      </div>
     </div>
+  </fieldset>
 
-    <!-- Actions -->
-    <div class="admin-actions">
-      <button type="submit">Save changes</button>
+  <!-- =========================
+       Actions
+       ========================= -->
+  <div class="admin-actions admin-actions-sticky">
+    <div>
+      <button type="submit" class="btn-primary">
+        Save changes
+      </button>
 
-      <a href="{{ url_for('admin.f_bench', function_id=fn.id) }}">
+      <a
+        href="{{ url_for('admin.show_function_impl', function_id=fn.id) }}"
+        class="btn-secondary"
+      >
+        Cancel
+      </a>
+
+    -
+
+      <a
+        href="{{ url_for('admin.edit_bench', function_id=fn.id) }}"
+        class="btn-secondary"
+      >
         Edit benchmarks →
       </a>
     </div>
 
-  </form>
+  </div>
+
+</form>
+
+<section class="admin-danger-zone">
+      <h2>Danger zone</h2>
+      <p>
+        Deleting this function implementation will permanently remove it.
+        This action cannot be undone.
+      </p>
+    
+      <form
+        method="post"
+        action="{{ url_for('admin.delete_function_impl', function_id=fn.id) }}"
+        onsubmit="return confirm(
+          'Delete function {{ fn.real_name }}? This cannot be undone.'
+        );"
+      >
+        <button type="submit" class="btn-danger">
+          Delete function implementation
+        </button>
+      </form>
+    </section>
+
 
 </main>
 {% endblock %}

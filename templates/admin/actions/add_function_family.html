@@ -7,34 +7,56 @@ Manage function families | Admin
 {% block content %}
 <main class="admin-page">
 
-  <header class="admin-header">
-    <h1>Function families</h1>
-    <p>Semantic taxonomy for functions.</p>
-  </header>
+<header class="admin-header">
+  <h1>Function families</h1>
+  <p>Semantic taxonomy for functions.</p>
+</header>
 
-  <section class="admin-section">
-    <h2>Add family</h2>
+<form method="post" class="admin-form admin-form-wide">
 
-    <form method="post">
-      <div class="form-group">
-        <label>Slug</label>
-        <input name="slug" required placeholder="group_by">
-      </div>
+  <fieldset class="form-section">
+    <legend>Add function family</legend>
 
-      <div class="form-group">
-        <label>Display name</label>
-        <input name="display_name" required placeholder="Group by">
-      </div>
+    <div class="form-group">
+      <label>Slug</label>
+      <input
+        name="slug"
+        required
+        placeholder="group_by"
+      >
+      <small class="form-hint">
+        URL-friendly identifier (lowercase, no spaces)
+      </small>
+    </div>
 
-      <div class="form-group">
-        <label>Description (HTML)</label>
-        <textarea name="description" rows="4"></textarea>
-      </div>
+    <div class="form-group">
+      <label>Display name</label>
+      <input
+        name="display_name"
+        required
+        placeholder="Group by"
+      >
+    </div>
 
-      <button type="submit">Create family</button>
-    </form>
-  </section>
+    <div class="form-group">
+      <label>Description (HTML)</label>
+      <textarea
+        name="description"
+        class="code-textarea"
+        rows="6"
+        placeholder="<p>Semantic grouping operations…</p>"
+      ></textarea>
+    </div>
 
+  </fieldset>
+
+  <div class="admin-actions admin-actions-spread">
+    <button type="submit" class="btn-primary">
+      Create family
+    </button>
+  </div>
+
+</form>
 </main>
 {% endblock %}
 

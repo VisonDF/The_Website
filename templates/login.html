@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin login
+{% endblock %}
+
+{% block content %}
+<main class="admin-page admin-page-centered">
+
+  <section class="admin-login-card">
+
+    <header class="admin-header admin-header-centered">
+      <h1>Admin access</h1>
+      <p>
+        Restricted area — authentication required.
+      </p>
+    </header>
+
+    <form method="post" class="admin-form admin-form-wide">
+
+      <!-- =========================
+           Credentials
+           ========================= -->
+      <fieldset class="admin-fieldset">
+        <legend>Credentials</legend>
+
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            name="username"
+            required
+            autofocus
+            autocomplete="username"
+            placeholder="admin"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            required
+            autocomplete="current-password"
+            placeholder="••••••••"
+          >
+        </div>
+      </fieldset>
+
+      <!-- =========================
+           Actions
+           ========================= -->
+      <div class="admin-actions admin-actions-spread">
+        <button type="submit" class="btn-primary">
+          Sign in
+        </button>
+
+        <a href="{{ url_for('main.index') }}" class="btn-link">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+
+  </section>
+
+</main>
+{% endblock %}

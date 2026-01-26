@@ -45,7 +45,7 @@ Function taxonomy | Admin
                     {{ fn.api_level }}
                   </td>
                   <td>
-                    <select name="family_{{ fn.id }}">
+                    <select name="family_{{ fn.id }}" class="admin-select">
                       {% for fam in families %}
                         <option
                           value="{{ fam.id }}"
@@ -69,10 +69,11 @@ Function taxonomy | Admin
       </section>
     {% endfor %}
 
-    <div class="admin-actions">
-      <button type="submit">Save taxonomy changes</button>
+    <div class="admin-actions admin-actions-sticky">
+      <button type="submit" class="btn-primary">
+        Save taxonomy changes
+      </button>
     </div>
-
   </form>
 
 </main>

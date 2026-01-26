@@ -6,14 +6,15 @@ Edit benchmarks — {{ fn.real_name }} | Admin
 
 {% block content %}
 
+<main class="admin-page">
+
+
 <a
   href="{{ url_for('admin.add_function_benchmark', function_id=fn.id) }}"
   class="admin-link"
 >
   + Add benchmark
 </a>
-
-<main class="admin-page">
 
   <header class="admin-header">
     <h1>Edit benchmark</h1>
@@ -25,62 +26,120 @@ Edit benchmarks — {{ fn.real_name }} | Admin
   </header>
 
   {% if benchmark %}
-    <section class="benchmark-edit-card">
-      <form method="post">
+<section class="container">
 
-        <input type="hidden" name="benchmark_id" value="{{ benchmark.id }}">
+  <form method="post" class="admin-form admin-form-wide">
 
-        <div class="form-group">
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            value="{{ benchmark.title }}"
+    <input type="hidden" name="benchmark_id" value="{{ benchmark.id }}">
+
+    <!-- =========================
+         Benchmark metadata
+         ========================= -->
+    <fieldset class="form-section">
+      <legend>Benchmark metadata</legend>
+
+      <div class="form-group">
+        <label>Title</label>
+        <input
+          type="text"
+          name="title"
+          value="{{ benchmark.title }}"
+          required
+        >
+      </div>
+    </fieldset>
+
+    <!-- =========================
+         Benchmark narrative
+         ========================= -->
+    <fieldset class="form-section">
+      <legend>Benchmark description</legend>
+
+      <div class="form-group">
+        <label>
+          Description (HTML)
+          <button
+            type="button"
+            class="preview-toggle"
+            onclick="togglePreview()"
+          >
+            Preview
+          </button>
+        </label>
+
+        <div class="editor-preview-wrapper">
+
+          <textarea
+            id="description-editor"
+            name="description_html"
+            class="code-textarea code-textarea-large"
+            oninput="updatePreview()"
             required
-          >
+          >{{ benchmark.description_html }}</textarea>
+
+          <div
+            id="description-preview"
+            class="html-preview"
+            hidden
+          ></div>
+
         </div>
 
-        <div class="form-group">
-          <label>Benchmark description (HTML)</label>
+        <small class="form-hint">
+          This HTML is rendered verbatim on the documentation page.
+        </small>
+      </div>
+    </fieldset>
 
-          <div class="preview-toggle">
-            <button type="button" class="toggle-btn">
-              Toggle preview
-            </button>
-          </div>
+    <!-- =========================
+         Actions
+         ========================= -->
+    <div class="admin-actions admin-actions-sticky">
+      <button type="submit" class="btn-primary">
+        Save benchmark
+      </button>
 
-          <div class="editor-preview-container">
-            <textarea
-              class="html-editor"
-              name="description_html"
-              rows="14"
-              required
-            >{{ benchmark.description_html }}</textarea>
+      <a
+        href="{{ url_for('admin.show_benchs', benchmark_id=benchmark.id) }}"
+        class="btn-secondary"
+      >
+        Cancel
+      </a>
 
-            <div class="html-preview hidden"></div>
-          </div>
-        </div>
+          -
 
-        <div class="benchmark-actions">
-          <button type="submit">Save benchmark</button>
+      <a
+        href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=benchmark.id) }}"
+        class="btn-secondary"
+      >
+        Edit datasets →
+      </a>
+    </div>
 
-          <a
-            href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=benchmark.id) }}"
-            class="admin-link"
-          >
-            Edit datasets
-          </a>
-        </div>
+  </form>
 
+</section>
+    <section class="admin-danger-zone">
+      <h2>Danger zone</h2>
+      <p>
+        Deleting this function benchmark will permanently remove it.
+        This action cannot be undone.
+      </p>
+    
+      <form
+        method="post"
+        action="{{ url_for('admin.delete_function_bench', function_id=fn.id) }}"
+        onsubmit="return confirm(
+          'Delete benchmark {{ benchmark.title }}? This cannot be undone.'
+        );"
+      >
+        <button type="submit" class="btn-danger">
+          Delete function implementation
+        </button>
       </form>
     </section>
-  {% endif %}
 
-  <footer class="admin-footer">
-    <a href="{{ url_for('admin.edit_f_impl', function_id=fn.id) }}">
-      ← Back to function
-    </a>
-  </footer>
+  {% endif %}
 
 </main>
 
