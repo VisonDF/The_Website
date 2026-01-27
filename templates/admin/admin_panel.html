@@ -19,74 +19,68 @@ Admin panel
       <div class="card-grid">
 
         <!-- Taxonomy -->
-        <div class="doc-card card-variant-1">
-          <h3>Taxonomy</h3>
-          <p>
-            Reassign function implementations to semantic families.
-            Controls how documentation is structured and navigated.
-          </p>
-          <a href="{{ url_for('admin.taxonomy') }}" class="btn">
-            Edit taxonomy →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.taxonomy') }}">
+            <div class="doc-card card-variant-1">
+              <h3>Taxonomy</h3>
+              <p>
+                Reassign function implementations to semantic families.
+                Controls how documentation is structured and navigated.
+              </p>
+            </div>
+        </a>
 
         <!-- Benchmarks -->
-        <div class="doc-card card-variant-2">
-          <h3>Benchmarks</h3>
-          <p>
-            Read-only overview of benchmark narratives attached to
-            function implementations.
-          </p>
-          <a href="{{ url_for('admin.show_benchs') }}" class="btn">
-            Show benchmarks →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.show_benchs') }}">
+            <div class="doc-card card-variant-2">
+              <h3>Benchmarks</h3>
+              <p>
+                Read-only overview of benchmark narratives attached to
+                function implementations.
+              </p>
+            </div>
+        </a>
 
         <!-- Benchmark datasets -->
-        <div class="doc-card card-variant-3">
-          <h3>Datasets</h3>
-          <p>
-            Inspect which datasets are used by benchmarks and manage
-            dataset associations.
-          </p>
-          <a href="{{ url_for('admin.show_datasets') }}" class="btn">
-            Show datasets →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.show_datasets') }}">
+            <div class="doc-card card-variant-3">
+              <h3>Datasets</h3>
+              <p>
+                Inspect which datasets are used by benchmarks and manage
+                dataset associations.
+              </p>
+            </div>
+        </a>
 
         <!-- Function implementations -->
-        <div class="doc-card card-variant-4">
-          <h3>Function implementations</h3>
-          <p>
-            Concrete implementations exposed by the engine.
-            Entry point for editing signatures, descriptions, and benchmarks.
-          </p>
-          <a href="{{ url_for('admin.show_function_impl') }}" class="btn">
-            Show functions →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.show_function_impl') }}">
+            <div class="doc-card card-variant-4">
+              <h3>Function implementations</h3>
+              <p>
+                Concrete implementations exposed by the engine.
+                Entry point for editing signatures, descriptions, and benchmarks.
+              </p>
+            </div>
+        </a>
 
         <!-- Function families -->
-        <div class="doc-card card-variant-1">
-          <h3>Function families</h3>
-          <p>
-            Semantic categories used to organize functions
-            across documentation and navigation.
-          </p>
-          <a href="{{ url_for('admin.show_function_family') }}" class="btn">
-            Show families →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.show_function_family') }}">
+            <div class="doc-card card-variant-1">
+              <h3>Function families</h3>
+              <p>
+                Semantic categories used to organize functions
+                across documentation and navigation.
+              </p>
+            </div>
+        </a>
 
-        <div class="doc-card card-variant-2">
-          <h3>Developpment</h3>
-          <p>
-            Deep dives into the engine’s development: design choices, performance trade-offs, and the reasoning behind the architecture.          
-          </p>
-          <a href="{{ url_for('admin.show_dev') }}" class="btn">
-            Show Dev →
-          </a>
-        </div>
+        <a href="{{ url_for('admin.show_dev') }}">
+            <div class="doc-card card-variant-2">
+              <h3>Developpment</h3>
+              <p>
+                Deep dives into the engine’s development: design choices, performance trade-offs, and the reasoning behind the architecture.          
+              </p>
+            </div>
+        </a>
 
       </div>
     </section>

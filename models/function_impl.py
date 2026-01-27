@@ -14,6 +14,8 @@ class FunctionImpl(db.Model):
 
     real_name = db.Column(db.String(128), nullable=False)
     api_level = db.Column(db.Enum("high", "low"), nullable=False, index=True)
+    network   = db.Column(db.Boolean, nullable=False)
+    gpu       = db.Column(db.Boolean, nullable=False)
 
     signature_html   = db.Column(db.Text)
     description_html = db.Column(db.Text)

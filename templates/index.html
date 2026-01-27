@@ -6,7 +6,11 @@
        ========================= -->
         <section class="hero">
             <h1>A dataframe engine built for control.</h1>
-            <p><i>Decide when you pay the cost — and why.</i></p>
+            <div class="rotator">
+                <p class="rotator-sentence active"><i>Decide when you pay the cost — and why.</i></p>
+                <p class="rotator-sentence"><i>Sentence 2.</i></p>
+                <p class="rotator-sentence"><i>Sentence 3.</i></p>
+            </div>
         </section>
 
         <section class="split">
@@ -107,6 +111,17 @@
             </p>
             <a href="dev">Development section →</a>
         </section>
+
+<script>
+  const sentences = document.querySelectorAll(".rotator-sentence");
+  let index = 0;
+
+  setInterval(() => {
+    sentences[index].classList.remove("active");
+    index = (index + 1) % sentences.length;
+    sentences[index].classList.add("active");
+  }, 5000);
+</script>
 
 {% endblock %}
 

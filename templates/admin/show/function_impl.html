@@ -31,6 +31,8 @@ Function implementations | Admin
           <th>API</th>
           <th>Family</th>
           <th>Default dataset</th>
+          <th>Network</th>
+          <th>GPU</th>
           <th>Created</th>
           <th>Actions</th>
         </tr>
@@ -52,6 +54,12 @@ Function implementations | Admin
               {% else %}
                 <em>—</em>
               {% endif %}
+            </td>
+            <td>
+              {{ fn.network }}
+            </td>
+            <td>
+              {{ fn.gpu }}
             </td>
             <td>
               {{ fn.created_at.strftime("%Y-%m-%d") }}

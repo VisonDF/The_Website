@@ -37,6 +37,9 @@ def edit_function_impl(function_id):
         fn.api_level = request.form["api_level"]
         fn.family_id = int(request.form["family_id"])
 
+        fn.network = True if request.form.get("network") == "yes" else False
+        fn.gpu     = True if request.form.get("gpu") == "yes" else False
+
         default_dataset_id = request.form.get("default_dataset_id")
         fn.default_dataset_id = (
             int(default_dataset_id) if default_dataset_id else None
@@ -72,11 +75,13 @@ def add_function_impl():
 
     if request.method == "POST":
         fn = FunctionImpl(
-            real_name=request.form["real_name"],
-            api_level=request.form["api_level"],
-            family_id=int(request.form["family_id"]),
-            signature_html=request.form.get("signature_html"),
-            description_html=request.form.get("description_html"),
+            real_name        = request.form["real_name"],
+            api_level        = request.form["api_level"],
+            family_id        = int(request.form["family_id"]),
+            signature_html   = request.form.get("signature_html"),
+            description_html = request.form.get("description_html"),
+            network          = True if request.form.get('network') == "Yes" else False,
+            gpu              = True if request.form.get('gpu') == "Yes" else False,
             default_dataset_id=(
                 int(request.form["default_dataset_id"])
                 if request.form.get("default_dataset_id")

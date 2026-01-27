@@ -1,34 +1,43 @@
 {% extends "base.html" %}
 
 {% block title %}
-Admin panel
+API
 {% endblock %}
 
 {% block content %}
 
-        <!-- Hero -->
-        <section class="hero">
-            {% if lvl == 'high' %}
-            <h1>Welcome to VisonDF High-Level API Documentation</h1>
-            <select id="api-level-select" class="admin-select">
-              <option value="high" selected>High-level API</option>
-              <option value="low">Low-level API</option>
-            </select>
-            {% else %}
-            <h1>Welcome to VisonDF Low-Level API Documentation</h1>
-            <select id="api-level-select" class="admin-select">
-              <option value="high">High-level API</option>
-              <option value="low" selected>Low-level API</option>
-            </select>
-            {% endif %}
 
-
-            {% if not family %}
-                <p>Pick a function family below.</p>
-            {% else %}
-                <p>Pick a function below.</p>
-            {% endif %}
-        </section>
+        <div class="hero-selectors">
+          <!-- Left: API level -->
+          <div class="selectors-left">
+            <select id="api-level-select" class="admin-select">
+              {% if lvl == 'high' %}
+                <option value="high" selected>High-level API</option>
+                <option value="low">Low-level API</option>
+              {% else %}
+                <option value="high">High-level API</option>
+                <option value="low" selected>Low-level API</option>
+              {% endif %}
+            </select>
+          </div>
+        
+          <!-- Right: only if family -->
+          {% if family %}
+            <div class="selectors-right">
+              <select id="network-select" class="admin-select">
+                <option value="any" {% if network == "any" %} selected {% endif %}>Network: Any</option>
+                <option value="yes" {% if network == "yes" %} selected {% endif %}>Network: Yes</option>
+                <option value="no" {% if network == "no" %} selected {% endif %}>Network: No</option>
+              </select>
+        
+              <select id="gpu-select" class="admin-select">
+                <option value="any" {% if gpu == "any" %} selected {% endif %}>GPU: Any</option>
+                <option value="yes" {% if gpu == "yes" %} selected {% endif %}>GPU: Yes</option>
+                <option value="no" {% if gpu == "no" %} selected {% endif %}>GPU: No</option>
+              </select>
+            </div>
+          {% endif %}
+        </div>
 
         <!-- Card Grid -->
         <section class="container">
@@ -39,16 +48,19 @@ Admin panel
                     {% for card in cards %}
                         
                         {% set variant = (loop.index0 % 4) + 1 %}
-                        
-                        <div class="doc-card card-variant-{{ variant }}">
-                            <h3>{{ card.display_name }}</h3>
-                            <p>
-                            {{ card.description }}
-                            </p>
-                            <a class="btn" href="{{ url_for('docs.show_functions', 
-                                                             lvl=lvl, 
-                                                             slug=card.slug) }}">Go! →</a>
-                        </div>
+                       
+                        <a href="{{ url_for('docs.show_functions', 
+                                            lvl=lvl, 
+                                            slug=card.slug,
+                                            network="any",
+                                            gpu="any") }}">
+                            <div class="doc-card card-variant-{{ variant }}">
+                                <h3>{{ card.display_name }}</h3>
+                                <p>
+                                {{ card.description }}
+                                </p>
+                            </div>
+                        </a>
                     {% endfor %}
 
                 {% else %}
@@ -57,14 +69,15 @@ Admin panel
 
                         {% set variant = (loop.index0 % 4) + 1 %}
 
-                        <div class="doc-card card-variant-{{ variant }}">
-                            <h3>{{ card.real_name }}</h3>
-                            <p>
-                            {{ card.description_html | safe }}
-                            </p>
-                            <a class="btn" href="{{ url_for('docs.function_doc', 
-                                                             function_id=card.id) }}">Go! →</a>
-                        </div>
+                        <a href="{{ url_for('docs.function_doc', 
+                                            function_id=card.id) }}">
+                            <div class="doc-card card-variant-{{ variant }}">
+                                <h3>{{ card.real_name }}</h3>
+                                <p>
+                                {{ card.description_html | safe }}
+                                </p>
+                            </div>
+                        </a>
 
                     {% endfor %}
 
@@ -76,27 +89,52 @@ Admin panel
         <br>
 
         <script>
-          {% if not family %}
-            document.getElementById("api-level-select")
-              .addEventListener("change", (e) => {
-                const level = e.target.value;
-                if (!level) return;
+        {% if family %}
+          const lvl     = "{{ lvl }}";
+          const family  = "{{ family }}";
+          const network = "{{ network }}";
+          const gpu     = "{{ gpu }}";
+        {% endif %}
         
-                // Redirect to your docs route
-                window.location.href = `/docs/${level}`;
-              });
-          {% else %}
-            const family = "{{ family }}"
-            document.getElementById("api-level-select")
-              .addEventListener("change", (e) => {
-                const level = e.target.value;
-                if (!level) return;
+          const apiSelect = document.getElementById("api-level-select");
+          if (apiSelect) {
+            apiSelect.addEventListener("change", (e) => {
+              const lvlVal = e.target.value;
+              if (!lvlVal) return;
         
-                // Redirect to your docs route
-                  window.location.href = `/docs/${level}+${ family }`;
-              });
-          {% endif %}
+              {% if family %}
+                window.location.href = `/docs/${lvlVal}+${family}+${network}+${gpu}`;
+              {% else %}
+                window.location.href = `/docs/${lvlVal}`;
+              {% endif %}
+            });
+          }
+        
+        {% if family %}
+          const networkSelect = document.getElementById("network-select");
+          if (networkSelect) {
+            networkSelect.addEventListener("change", (e) => {
+              const networkVal = e.target.value;
+              window.location.href = `/docs/${lvl}+${family}+${networkVal}+${gpu}`;
+            });
+          }
+        
+          const gpuSelect = document.getElementById("gpu-select");
+          if (gpuSelect) {
+            gpuSelect.addEventListener("change", (e) => {
+              const gpuVal = e.target.value;
+              window.location.href = `/docs/${lvl}+${family}+${network}+${gpuVal}`;
+            });
+          }
+        {% endif %}
         </script>
+    
+    {% if family %}
+      <a class="back-to-families"
+         href="{{ url_for('docs.show_families', lvl=lvl) }}">
+        → Back to Families
+      </a>
+    {% endif %}
 
 {% endblock %}
 

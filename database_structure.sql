@@ -50,6 +50,8 @@ CREATE TABLE IF NOT EXISTS function_impl (
 
     real_name           VARCHAR(128) NOT NULL,
     api_level           ENUM('high', 'low') NOT NULL,
+    network             BOOLEAN NOT NULL,
+    gpu                 BOOLEAN NOT NULL,
 
     signature_html      TEXT,   -- stored as HTML (or code preformatted as HTML)
     description_html    TEXT,   -- stored as HTML

@@ -60,6 +60,23 @@ Edit function — {{ fn.real_name }} | Admin
         </select>
       </div>
     </div>
+
+    <div class="form-group">
+      <label>Network</label>
+      <select name="network" required>
+        <option value="no" {% if not fn.network %} selected {% endif %} >No</option>
+        <option value="yes" {% if fn.network %} selected {% endif %} >Yes</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>GPU</label>
+      <select name="gpu" required>
+        <option value="no" {% if not fn.gpu %} selected {% endif %} >No</option>
+        <option value="yes" {% if fn.gpu %} selected {% endif %} >Yes</option>
+      </select>
+    </div>
+
   </fieldset>
 
   <!-- =========================

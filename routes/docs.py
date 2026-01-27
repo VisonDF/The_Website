@@ -20,24 +20,44 @@ def show_families(lvl):
                            lvl=lvl,
                            family="")
 
-@bp.route("/<lvl>+<slug>")
-def show_functions(lvl, slug):
+@bp.route("/<lvl>+<slug>+<network>+<gpu>")
+def show_functions(lvl, slug, network, gpu):
 
     if lvl != 'low' and lvl != 'high':
         return render_template("404.html")
 
-    family    = FunctionFamily.query.filter_by(slug=slug).first_or_404()
-    functions = FunctionImpl.query.filter_by(family_id=family.id).filter_by(api_level=lvl).all()
+    family = FunctionFamily.query.filter_by(slug=slug).first_or_404()
+
+    query  = FunctionImpl.query.filter_by(family_id=family.id, api_level=lvl)
+
+    if network != "any":
+        network_val = (network == "yes")
+        query = query.filter_by(network=network_val)
+
+    if gpu != "any":
+        gpu_val = (gpu == "yes")        
+        query = query.filter_by(gpu=gpu_val)
+
+    functions = query.all()
 
     return render_template("docs/doc_cards.html", 
                            cards=functions, 
                            lvl=lvl, 
-                           family=slug)
+                           family=slug,
+                           network=network,
+                           gpu=gpu)
 
 @bp.route("/function/<int:function_id>")
 def function_doc(function_id):
-    fn = FunctionImpl.query.get_or_404(function_id)
-    return render_template("docs/function.html", fn=fn)
+    fn       = FunctionImpl.query.get_or_404(function_id)
+    siblings = FunctionImpl.query.filter_by(family=fn.family).all()
+    return render_template("docs/function.html", 
+                           fn=fn,
+                           siblings=siblings)
+
+
+
+
 
 
 

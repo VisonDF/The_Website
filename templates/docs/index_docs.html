@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Admin panel
+API Select
 {% endblock %}
 
 {% block content %}
@@ -24,66 +24,61 @@ Admin panel
         <section class="container">
             <div class="dboxes">
                 <!-- High-Level API -->
-                <div class="box1">
-                    <h2>High-Level API</h2>
 
-                    <p>
-                        Expressive, fluent, and close to analytical pseudocode.
-                        Designed for clarity and fast iteration.
-                    </p>
+                <a
+                    href="{{ url_for('docs.show_families', lvl='high') }}"
+                >
 
-                    <ul>
-                        <li>Operator overloading</li>
-                        <li>Temporary objects</li>
-                        <li>dplyr-style pipelines</li>
-                        <li>Readable intent</li>
-                    </ul>
+                    <div class="box1">
+                        <h2>High-Level API</h2>
 
-                    <p>
-                        <strong>Trade-off:</strong><br />
-                        Small, predictable overhead due to intermediate objects.
-                    </p>
+                        <p>
+                            Expressive, fluent, and close to analytical pseudocode.
+                            Designed for clarity and fast iteration.
+                        </p>
 
-                    <div class="hero-actions">
-                        <a
-                            class="btn primary"
-                            href="{{ url_for('docs.show_families', lvl='high') }}"
-                        >
-                            Enter High-Level API →
-                        </a>
+                        <ul>
+                            <li>Operator overloading</li>
+                            <li>Temporary objects</li>
+                            <li>dplyr-style pipelines</li>
+                            <li>Readable intent</li>
+                        </ul>
+
+                        <p>
+                            <strong>Trade-off:</strong><br />
+                            Small, predictable overhead due to intermediate objects.
+                        </p>
+
                     </div>
-                </div>
 
-                <!-- Low-Level API -->
-                <div class="box1">
-                    <h2>Low-Level API</h2>
+                </a>
 
-                    <p>
-                        Explicit operators with direct access to the execution
-                        model. Nothing implicit. Nothing hidden.
-                    </p>
+                <a
+                    href="{{ url_for('docs.show_families', lvl='low') }}"
+                >
 
-                    <ul>
-                        <li>No operator overloading</li>
-                        <li>No hidden allocations</li>
-                        <li>Explicit execution steps</li>
-                        <li>Metal-friendly</li>
-                    </ul>
+                    <div class="box1">
+                        <h2>Low-Level API</h2>
 
-                    <p>
-                        <strong>Benefit:</strong><br />
-                        Zero-cost abstractions and full control.
-                    </p>
+                        <p>
+                            Explicit operators with direct access to the execution
+                            model. Nothing implicit. Nothing hidden.
+                        </p>
 
-                    <div class="hero-actions">
-                        <a
-                            class="btn"
-                            href="{{ url_for('docs.show_families', lvl='low') }}"
-                        >
-                            Enter Low-Level API →
-                        </a>
+                        <ul>
+                            <li>No operator overloading</li>
+                            <li>No hidden allocations</li>
+                            <li>Explicit execution steps</li>
+                            <li>Metal-friendly</li>
+                        </ul>
+
+                        <p>
+                            <strong>Benefit:</strong><br />
+                            Zero-cost abstractions and full control.
+                        </p>
+
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
