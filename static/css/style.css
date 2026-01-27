@@ -1547,3 +1547,46 @@ pre {
 }
 
 
+
+.function-switcher {
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .function-switcher {
+    width: 100%;
+  }
+
+  .function-switcher select {
+    width: 100%;
+  }
+}
+
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.section-header h1,
+.section-header h2 {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .function-switcher,
+  .function-switcher select {
+    width: 100%;
+  }
+}
+
+

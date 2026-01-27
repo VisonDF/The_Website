@@ -8,6 +8,7 @@ class Benchmark(db.Model):
     function_impl_id = db.Column(
         db.Integer,
         db.ForeignKey("function_impl.id", ondelete="CASCADE"),
+        unique=True,
         nullable=False,
         index=True,
     )
@@ -22,7 +23,7 @@ class Benchmark(db.Model):
 
     function_impl = db.relationship(
         "FunctionImpl",
-        back_populates="benchmarks",
+        back_populates="benchmark",
     )
 
     benchmark_datasets = db.relationship(

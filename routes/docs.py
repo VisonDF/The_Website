@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template
 from models.function_family import FunctionFamily
 from models.function_impl import FunctionImpl
+from models.benchmark import Benchmark
+from models.benchmark_dataset import BenchmarkDataset
 
 bp = Blueprint("docs", __name__)
 
@@ -49,11 +51,24 @@ def show_functions(lvl, slug, network, gpu):
 
 @bp.route("/function/<int:function_id>")
 def function_doc(function_id):
-    fn       = FunctionImpl.query.get_or_404(function_id)
-    siblings = FunctionImpl.query.filter_by(family=fn.family).all()
-    return render_template("docs/function.html", 
-                           fn=fn,
-                           siblings=siblings)
+    fn = FunctionImpl.query.get_or_404(function_id)
+
+    benchmark = fn.benchmark
+
+    # Siblings (same family)
+    siblings = (
+        FunctionImpl.query
+        .filter_by(family_id=fn.family_id)
+        .filter(FunctionImpl.id != fn.id)
+        .all()
+    )
+
+    return render_template(
+        "docs/function.html",
+        fn=fn,
+        siblings=siblings,
+        benchmark=benchmark,
+    )
 
 
 

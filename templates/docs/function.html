@@ -1,19 +1,200 @@
 {% extends "base.html" %}
 
 {% block title %}
-API
+{{ fn.real_name }}
 {% endblock %}
 
 {% block content %}
 
 <section class="container">
 
+    {% set groups = {
+      'net_gpu': [],
+      'net_cpu': [],
+      'local': []
+    } %}
+    
+    {% for f in siblings %}
+      {% if f.network and f.gpu %}
+        {% set _ = groups['net_gpu'].append(f) %}
+      {% elif f.network %}
+        {% set _ = groups['net_cpu'].append(f) %}
+      {% else %}
+        {% set _ = groups['local'].append(f) %}
+      {% endif %}
+    {% endfor %}
+
+  <!-- =========================
+       Function documentation
+       ========================= -->
+
+  <section class="function-doc" id="impl">
+    <div class="section-header">
+      <h1 class="section-title">{{ fn.real_name }}</h1>
+
+      <div class="function-switcher">
+        <select class="admin-select function-switch-select">
+          <option disabled selected>Switch function…</option>
+
+          {% if groups.net_gpu %}
+            <optgroup label="Network + GPU">
+              {% for f in groups.net_gpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
+          {% if groups.net_cpu %}
+            <optgroup label="Network only">
+              {% for f in groups.net_cpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
+          {% if groups.local %}
+            <optgroup label="Local (CPU)">
+              {% for f in groups.local %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+    <i>Dataset(s) used is/are downloable at the end of this section</i>
+
+    <br>
+    <br>
+
+    {% if fn.signature_html %}
+      <div class="function-signature">
+        {{ fn.signature_html | safe }}
+      </div>
+    {% endif %}
+
+    <br>
+
+    {% if fn.description_html %}
+      <div class="function-description">
+        {{ fn.description_html | safe }}
+      </div>
+    {% endif %}
+
+    {% if fn.default_dataset %}
+      <div class="function-dataset">
+        <h3>Default dataset</h3>
+        <a href="{{ fn.default_dataset.download_url }}">
+          ⬇ Download {{ fn.default_dataset.name }}
+        </a>
+      </div>
+    {% endif %}
 
 
-    <hr>
-    Benchmarks
-    </hr>
+  </section>
+
+  <hr>
+
+  <!-- =========================
+       Benchmark
+       ========================= -->
+
+  <section class="benchmarks">
+    <div class="section-header">
+      <h2 class="section-title" id="bench">Benchmark</h2>
+
+      <div class="function-switcher">
+        <select class="admin-select function-switch-select">
+          <option disabled selected>Switch function…</option>
+
+          {% if groups.net_gpu %}
+            <optgroup label="Network + GPU">
+              {% for f in groups.net_gpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
+          {% if groups.net_cpu %}
+            <optgroup label="Network only">
+              {% for f in groups.net_cpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
+          {% if groups.local %}
+            <optgroup label="Local (CPU)">
+              {% for f in groups.local %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+  <i>Dataset(s) used is/are downloadable at the end of this section</i>
+    <br>
+    <br>
+
+    {% if benchmark %}
+      <article class="benchmark">
+
+        <div class="benchmark-description">
+          {{ benchmark.description_html | safe }}
+        </div>
+
+        {% if benchmark.datasets %}
+          <div class="benchmark-datasets">
+            <h4>Datasets used</h4>
+            <ul>
+              {% for dataset in benchmark.datasets %}
+                <li>
+                  <a href="{{ dataset.download_url }}">
+                    ⬇ {{ dataset.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </article>
+
+    {% else %}
+      <p>No benchmarks available for this function.</p>
+    {% endif %}
+  </section>
 
 </section>
 
-{% endbock %}
+
+   <a class="back-to-families"
+      href="{{ url_for('docs.show_functions', 
+                       lvl=fn.api_level, 
+                       slug=fn.family.slug, 
+                       network="any", 
+                       gpu="any") }}">
+
+     → Back to Family
+   </a>
+
+<script>
+  document.querySelectorAll(".function-switch-select")
+    .forEach((switcher) => {
+      switcher.addEventListener("change", (e) => {
+        const id = e.target.value;
+        if (!id) return;
+        window.location.href = `/docs/function/${id}`;
+      });
+    });
+</script>
+
+{% endblock %}
+
+
+
+
+

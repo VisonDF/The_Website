@@ -36,10 +36,11 @@ class FunctionImpl(db.Model):
     family          = db.relationship("FunctionFamily", back_populates="impls")
     default_dataset = db.relationship("Dataset")
 
-    benchmarks = db.relationship(
+    benchmark = db.relationship(
         "Benchmark",
         back_populates="function_impl",
         cascade="all, delete-orphan",
+        uselist=False,
         lazy=True,
     )
 
