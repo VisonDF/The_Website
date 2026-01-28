@@ -380,6 +380,9 @@ pre {
   /* Subtle grounding shadow */
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.08);
+
+  overflow: auto;
+
 }
 
 .code-block:hover,
@@ -393,6 +396,21 @@ pre {
     0 14px 32px rgba(0, 0, 0, 0.08);
 }
 
+.code-block-normal {
+  position: relative;
+
+  border-radius: 22px;
+  border: 1px solid var(--border-soft);
+  background-color: var(--bg-main);
+
+  outline: none;
+
+  max-height: 480px;
+
+  overflow: auto;
+
+}
+
 .code-rotator-link:hover {
   background-color: transparent;
 }
@@ -402,13 +420,16 @@ pre {
    ================================ */
 
 .code-block code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  font-family: 
+    "JetBrains Mono",
+    "Fira Code",
+    "Source Code Pro",
+    monospace;
+
+
   font-size: 0.95em;
   color: inherit; /* inherit container color, preserve Prism tokens */
-}
-
-.code-block {
-  border-radius: 12px;
 }
 
 .code-block {
@@ -429,6 +450,16 @@ pre {
 .code-block .token.class-name,
 .code-block .token.type     { color: var(--syntax-type); }
 .code-block .token.operator { color: var(--syntax-operator); }
+
+.code-block-normal .token.comment  { color: var(--syntax-comment); }
+.code-block-normal .token.keyword  { color: var(--syntax-keyword); font-weight: 600; }
+.code-block-normal .token.string   { color: var(--syntax-string); }
+.code-block-normal .token.number   { color: var(--syntax-number); }
+.code-block-normal .token.function { color: var(--syntax-function); }
+.code-block-normal .token.class-name,
+.code-block-normal .token.type     { color: var(--syntax-type); }
+.code-block-normal .token.operator { color: var(--syntax-operator); }
+
 
 /* Copy button */
 .copy-btn {
@@ -1587,6 +1618,14 @@ pre {
   .function-switcher select {
     width: 100%;
   }
+}
+
+code, pre {
+  font-family: 
+    "JetBrains Mono",
+    "Fira Code",
+    "Source Code Pro",
+    monospace;
 }
 
 

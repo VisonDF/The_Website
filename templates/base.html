@@ -167,6 +167,38 @@
         })();
         </script>
 
+<script>
+document.addEventListener("click", async (event) => {
+  const btn = event.target.closest(".copy-btn");
+  if (!btn) return;
+
+  const pre = btn.closest("pre");
+  if (!pre) return;
+
+  const code = pre.querySelector("code");
+  if (!code) return;
+
+  const text = code.innerText.trim();
+
+  try {
+    await navigator.clipboard.writeText(text);
+
+    // Visual feedback
+    const original = btn.textContent;
+    btn.textContent = "✅ Copied";
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+    }, 1500);
+  } catch (err) {
+    console.error("Copy failed", err);
+    btn.textContent = "❌ Error";
+  }
+});
+</script>
+
     </body>
 </html>
 

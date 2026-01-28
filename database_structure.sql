@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS function_impl (
 
     signature_html      TEXT,   -- stored as HTML (or code preformatted as HTML)
     description_html    TEXT,   -- stored as HTML
+    summary             TEXT,   
 
     default_dataset_id  INT NULL,
 

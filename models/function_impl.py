@@ -19,6 +19,7 @@ class FunctionImpl(db.Model):
 
     signature_html   = db.Column(db.Text)
     description_html = db.Column(db.Text)
+    summary          = db.Column(db.Text)
 
     default_dataset_id = db.Column(
         db.Integer,

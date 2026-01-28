@@ -6,7 +6,7 @@ bp = Blueprint("get_started", __name__)
 @bp.route("/")
 def index():
     items = GetStarted.query.all()
-    return render_template("get_started.html", items=items)
+    return render_template("get_started/get_started.html", items=items)
 
 
 
