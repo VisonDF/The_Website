@@ -33,8 +33,9 @@ Edit Get Started | Admin
           </option>
 
           {% for fn in fns %}
-            <option value="{{ fn.real_name }}">
+          <option value="{{ fn.id }}" {% if plan.function_impl.real_name == fn.real_name and plan.api_level == fn.api_level %} selected {% endif %}>
               {{ fn.real_name }}
+              . {{ fn.api_level }}
             </option>
           {% endfor %}
         </select>
@@ -51,7 +52,7 @@ Edit Get Started | Admin
           name="goal"
           rows="3"
           required
-        ></textarea>
+          >{{ plan.goal }}</textarea>
       </div>
 
       <!-- Priority -->
@@ -64,6 +65,7 @@ Edit Get Started | Admin
           id="priority"
           name="priority"
           type="number"
+          value="{{ plan.priority }}"
           placeholder="Optional (lower = earlier)"
         >
       </div>
@@ -73,7 +75,7 @@ Edit Get Started | Admin
     <!-- Actions -->
     <div class="admin-actions admin-actions-sticky">
       <button type="submit" class="btn-primary">
-        Create Plan
+        Save changes
       </button>
 
       <a href="{{ url_for('admin.show_get_started') }}" class="btn-link">

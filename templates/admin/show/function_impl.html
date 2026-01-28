@@ -33,6 +33,7 @@ Function implementations | Admin
           <th>Default dataset</th>
           <th>Network</th>
           <th>GPU</th>
+          <th>Summary</th>
           <th>Created</th>
           <th>Actions</th>
         </tr>
@@ -60,6 +61,9 @@ Function implementations | Admin
             </td>
             <td>
               {{ fn.gpu }}
+            </td>
+            <td>
+            {{ fn.summary }}
             </td>
             <td>
               {{ fn.created_at.strftime("%Y-%m-%d") }}

@@ -38,8 +38,9 @@ def edit_function_impl(function_id):
         fn.api_level = request.form["api_level"]
         fn.family_id = int(request.form["family_id"])
 
-        fn.network = True if request.form.get("network") == "yes" else False
-        fn.gpu     = True if request.form.get("gpu") == "yes" else False
+        fn.network = (request.form.get("network") == "yes")
+        fn.gpu     = (request.form.get("gpu") == "yes")
+        fn.summary = request.form["summary"]
 
         default_dataset_id = request.form.get("default_dataset_id")
         fn.default_dataset_id = (
@@ -83,6 +84,7 @@ def add_function_impl():
             description_html = request.form.get("description_html"),
             network          = True if request.form.get('network') == "Yes" else False,
             gpu              = True if request.form.get('gpu') == "Yes" else False,
+            summary          = request.form["summary"],
             default_dataset_id=(
                 int(request.form["default_dataset_id"])
                 if request.form.get("default_dataset_id")
@@ -505,7 +507,7 @@ def show_get_started():
     plans = (
         GetStarted.query
         .order_by(
-            GetStarted.priority.asc().nullslast(),
+            GetStarted.priority.asc(),
             GetStarted.id.asc(),
         )
         .all()
@@ -532,10 +534,12 @@ def edit_get_started(plan_id):
 
         plan.priority = int(request.form["priority"]) if request.form.get("priority") else None
 
-        fn = FunctionImpl.query.filter_by(
-            real_name=request.form["function_impl"]
-        ).first_or_404()
-        
+        fn = (
+            FunctionImpl.query
+            .filter_by(id=request.form["function_impl"])
+            .first_or_404()
+        )
+
         plan.function_impl = fn
         db.session.commit()
 
@@ -562,9 +566,12 @@ def add_get_started():
     )
 
     if request.method == "POST":
-        fn = FunctionImpl.query.filter_by(
-            real_name=request.form["function_impl"]
-        ).first_or_404()
+
+        fn = (
+            FunctionImpl.query
+            .filter_by(id=request.form["function_impl"])
+            .first_or_404()
+        )
 
         plan = GetStarted(
             goal     = request.form["goal"],

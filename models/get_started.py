@@ -12,6 +12,11 @@ class GetStarted(db.Model):
         unique=True,
     )
 
+    api_level = db.Column(
+        db.Enum("low", "high", name="api_level_enum"),
+        nullable=False,
+    )
+
     goal       = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
 

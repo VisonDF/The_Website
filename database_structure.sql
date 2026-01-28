@@ -134,6 +134,8 @@ CREATE TABLE IF NOT EXISTS get_started (
 
     priority          INT,
 
+    api_level         ENUM("low", "high") NOT NULL,
+
     UNIQUE KEY uq_get_started_function (function_impl_id),
 
     CONSTRAINT fk_get_started_function

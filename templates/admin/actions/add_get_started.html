@@ -33,8 +33,9 @@ Add Get Started | Admin
           </option>
 
           {% for fn in fns %}
-            <option value="{{ fn.real_name }}">
+            <option value="{{ fn.id }}">
               {{ fn.real_name }}
+              . {{ fn.api_level }}
             </option>
           {% endfor %}
         </select>

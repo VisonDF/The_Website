@@ -30,7 +30,8 @@ def show_functions(lvl, slug, network, gpu):
 
     family = FunctionFamily.query.filter_by(slug=slug).first_or_404()
 
-    query  = FunctionImpl.query.filter_by(family_id=family.id, api_level=lvl)
+    query  = FunctionImpl.query.filter_by(family_id=family.id, 
+                                          api_level=lvl)
 
     if network != "any":
         network_val = (network == "yes")

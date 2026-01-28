@@ -8,7 +8,7 @@ def index():
     items = (
         GetStarted.query
         .order_by(
-            GetStarted.priority.asc().nullslast(),
+            GetStarted.priority.asc(),
             GetStarted.id.asc(),
         )
         .all()

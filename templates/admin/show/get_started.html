@@ -20,13 +20,14 @@ Get Started | Admin
     </div>
   </header>
 
-  {% if families %}
+  {% if plans %}
     <table class="admin-table">
       <thead>
         <tr>
           <th>Related Function Impl</th>
           <th>Goal</th>
           <th>Priority</th>
+          <th>API</th>
           <th>Created</th>
           <th>Actions</th>
         </tr>
@@ -37,8 +38,9 @@ Get Started | Admin
              <td><strong>{{ plan.function_impl.real_name }}</strong></td>
              <td><code>{{ plan.goal }}</code></td>
              <td>
-               {{ fam.priority }}
+               {{ plan.priority }}
              </td>
+             <td>{{ plan.api_level }}</td>
              <td>
                {{ plan.created_at.strftime("%Y-%m-%d") }}
              </td>
