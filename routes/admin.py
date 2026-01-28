@@ -12,6 +12,7 @@ from models.function_impl import FunctionImpl
 from models.benchmark import Benchmark
 from models.benchmark_dataset import BenchmarkDataset
 from models.dev import Dev
+from models.get_started import GetStarted
 from db import db
 from werkzeug.utils import secure_filename
 from collections import defaultdict
@@ -50,7 +51,7 @@ def edit_function_impl(function_id):
 
         db.session.commit()
 
-        return redirect(url_for("admin.dashboard", function_id=fn.id))
+        return redirect(url_for("admin.show_function_impl"))
 
     return render_template(
         "admin/actions/edit_function_impl.html",
@@ -116,7 +117,7 @@ def edit_bench(function_id):
 
         db.session.commit()
 
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.show_benchs"))
 
     benchmark = (
         Benchmark.query
@@ -137,7 +138,7 @@ def delete_function_bench(function_id):
     db.session.delete(fn)
     db.session.commit()
 
-    return redirect(url_for("admin.dashboard"))
+    return redirect(url_for("admin.show_function_impl"))
 
 @bp.route("/f_bench/add", methods=["GET", "POST"])
 @login_required
@@ -146,7 +147,8 @@ def add_function_benchmark():
     # FunctionImpls that DO NOT already have a benchmark
     functions_without_bench = (
         FunctionImpl.query
-        .outerjoin(Benchmark)
+        .outerjoin(Benchmark,
+                   Benchmark.function_impl_id == FunctionImpl.id)
         .filter(Benchmark.id.is_(None))
         .order_by(FunctionImpl.real_name)
         .all()
@@ -164,7 +166,7 @@ def add_function_benchmark():
         db.session.add(bench)
         db.session.commit()
 
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.show_benchs"))
 
     return render_template(
         "admin/actions/add_function_benchmarks.html",
@@ -498,6 +500,87 @@ def edit_dev(article_id):
         description_html=fn.description_html
     )
 
+@bp.route("/get_started/show", methods=["GET"])
+def show_get_started():
+    plans = (
+        GetStarted.query
+        .order_by(
+            GetStarted.priority.asc().nullslast(),
+            GetStarted.id.asc(),
+        )
+        .all()
+    )
+
+    return render_template(
+        "admin/show/get_started.html",
+        plans=plans,
+    )
+
+@bp.route("/get_started/<int:plan_id>", methods=["GET", "POST"])
+def edit_get_started(plan_id):
+
+    plan = GetStarted.query.get_or_404(plan_id)
+
+    fns = (
+        FunctionImpl.query
+        .order_by(FunctionImpl.real_name)
+        .all()
+    )
+
+    if request.method == "POST":
+        plan.goal = request.form["goal"]
+
+        plan.priority = int(request.form["priority"]) if request.form.get("priority") else None
+
+        fn = FunctionImpl.query.filter_by(
+            real_name=request.form["function_impl"]
+        ).first_or_404()
+        
+        plan.function_impl = fn
+        db.session.commit()
+
+        return redirect(url_for("admin.show_get_started"))
+
+    return render_template(
+        "admin/actions/edit_get_started.html",
+        plan=plan,
+        fns=fns,
+    )
+
+@bp.route("/get_started/add", methods=["GET", "POST"])
+def add_get_started():
+
+    fns = (
+        FunctionImpl.query
+        .outerjoin(
+                    GetStarted,
+                    GetStarted.function_impl_id == FunctionImpl.id
+                    )
+        .filter(GetStarted.id.is_(None))
+        .order_by(FunctionImpl.real_name)
+        .all()
+    )
+
+    if request.method == "POST":
+        fn = FunctionImpl.query.filter_by(
+            real_name=request.form["function_impl"]
+        ).first_or_404()
+
+        plan = GetStarted(
+            goal     = request.form["goal"],
+            priority = int(request.form["priority"]) if request.form.get("priority") else None,
+            function_impl=fn,
+        )
+
+        db.session.add(plan)
+        db.session.commit()
+
+        return redirect(url_for("admin.show_get_started"))
+
+    return render_template(
+        "admin/actions/add_get_started.html",
+        fns=fns,
+    )
 
 
 

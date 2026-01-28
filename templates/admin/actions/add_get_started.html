@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Get Started | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Add Get Started Plan</h1>
+    <p>Create a new plan.</p>
+  </header>
+
+  <form method="post" class="admin-form admin-form-wide">
+
+    <!-- Core metadata -->
+    <fieldset class="form-section">
+
+      <!-- Function implementation -->
+      <div class="form-group">
+        <label for="function_impl">
+          Function implementation
+        </label>
+
+        <select
+          id="function_impl"
+          name="function_impl"
+          required
+        >
+          <option value="">
+            — Select a function implementation —
+          </option>
+
+          {% for fn in fns %}
+            <option value="{{ fn.real_name }}">
+              {{ fn.real_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Goal -->
+      <div class="form-group">
+        <label for="goal">
+          Goal
+        </label>
+
+        <textarea
+          id="goal"
+          name="goal"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      <!-- Priority -->
+      <div class="form-group">
+        <label for="priority">
+          Priority
+        </label>
+
+        <input
+          id="priority"
+          name="priority"
+          type="number"
+          placeholder="Optional (lower = earlier)"
+        >
+      </div>
+
+    </fieldset>
+
+    <!-- Actions -->
+    <div class="admin-actions admin-actions-sticky">
+      <button type="submit" class="btn-primary">
+        Create Plan
+      </button>
+
+      <a href="{{ url_for('admin.show_get_started') }}" class="btn-link">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+
+  <br>
+
+</main>
+{% endblock %}
+
+
+
+

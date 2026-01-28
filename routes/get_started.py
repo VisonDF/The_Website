@@ -5,8 +5,16 @@ bp = Blueprint("get_started", __name__)
 
 @bp.route("/")
 def index():
-    items = GetStarted.query.all()
-    return render_template("get_started/get_started.html", items=items)
+    items = (
+        GetStarted.query
+        .order_by(
+            GetStarted.priority.asc().nullslast(),
+            GetStarted.id.asc(),
+        )
+        .all()
+    )
 
-
-
+    return render_template(
+        "get_started/get_started.html",
+        items=items,
+    )

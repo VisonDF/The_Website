@@ -1,15 +1,62 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ fn.real_name }}
+Get started · Kernel DataFrame
 {% endblock %}
 
 {% block content %}
 
+<section class="hero">
+  <h1>Get started</h1>
+  <p>
+    A visual map of common intentions when discovering Kernel DataFrame.
+    Some stops give quicker rewards than others.
+  </p>
+</section>
+
+<section>
+
+  {% set current_priority = None %}
+
+  {% for item in items %}
+
+    {% if current_priority != item.priority %}
+      {% if not loop.first %}
+        </div>
+      {% endif %}
+
+      <div class="card-grid">
+      {% set current_priority = item.priority %}
+    {% endif %}
+
+      <div class="doc-card card-variant-{{ loop.index0 % 4 + 1 }}">
+
+        <h3>
+          {{ item.function_impl.display_name }}
+        </h3>
+
+        <p>
+          {{ item.goal }}
+        </p>
+
+        <a
+          href="{{ url_for('function_impl.show', id=item.function_impl.id) }}"
+          class="btn"
+        >
+          Open →
+        </a>
+
+      </div>
+
+    {% if loop.last %}
+      </div>
+    {% endif %}
+
+  {% endfor %}
+
+</section>
 
 {% endblock %}
-
-
 
 
 

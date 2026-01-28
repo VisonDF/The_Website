@@ -42,7 +42,7 @@ def create_app():
     app.register_blueprint(main.bp)
     app.register_blueprint(dev.bp,        url_prefix="/dev")
     app.register_blueprint(docs.bp,        url_prefix="/docs")
-    app.register_blueprint(get_started.bp, url_prefix="/get-started")
+    app.register_blueprint(get_started.bp, url_prefix="/get_started")
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp, url_prefix="/admin")
 

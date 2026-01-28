@@ -132,6 +132,8 @@ CREATE TABLE IF NOT EXISTS get_started (
 
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
+    priority          INT,
+
     UNIQUE KEY uq_get_started_function (function_impl_id),
 
     CONSTRAINT fk_get_started_function

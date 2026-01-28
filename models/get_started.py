@@ -15,5 +15,7 @@ class GetStarted(db.Model):
     goal       = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
 
+    priority = db.Column(db.Integer)
+
     # Relationship
     function_impl = db.relationship("FunctionImpl")

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+Get Started | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Function familieGet Started Plans</h1>
+    <p>
+      Read-only view of Get Started Plans.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_get_started') }}" class="admin-link">
+        + Add Get Started Plan
+      </a>
+    </div>
+  </header>
+
+  {% if families %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Related Function Impl</th>
+          <th>Goal</th>
+          <th>Priority</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan in plans %}
+           <tr>
+             <td><strong>{{ plan.function_impl.real_name }}</strong></td>
+             <td><code>{{ plan.goal }}</code></td>
+             <td>
+               {{ fam.priority }}
+             </td>
+             <td>
+               {{ plan.created_at.strftime("%Y-%m-%d") }}
+             </td>
+             <td>
+                 <a href="{{ url_for('admin.edit_get_started', 
+                                     plan_id=plan.id) }}">
+                    Edit
+                </a>
+             </td>
+           </tr>
+        {% endfor %}      
+      </tbody>
+    </table>
+  {% else %}
+    <p>No function families defined.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+
+
+
