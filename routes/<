@@ -38,9 +38,8 @@ def edit_function_impl(function_id):
         fn.api_level = request.form["api_level"]
         fn.family_id = int(request.form["family_id"])
 
-        fn.network = (request.form.get("network") == "yes")
-        fn.gpu     = (request.form.get("gpu") == "yes")
-        fn.summary = request.form["summary"]
+        fn.network = True if request.form.get("network") == "yes" else False
+        fn.gpu     = True if request.form.get("gpu") == "yes" else False
 
         default_dataset_id = request.form.get("default_dataset_id")
         fn.default_dataset_id = (
@@ -84,7 +83,6 @@ def add_function_impl():
             description_html = request.form.get("description_html"),
             network          = True if request.form.get('network') == "Yes" else False,
             gpu              = True if request.form.get('gpu') == "Yes" else False,
-            summary          = request.form["summary"],
             default_dataset_id=(
                 int(request.form["default_dataset_id"])
                 if request.form.get("default_dataset_id")
@@ -106,29 +104,26 @@ def add_function_impl():
 
 @bp.route("/f_bench/<int:function_id>", methods=["GET", "POST"])
 def edit_bench(function_id):
-
     fn = FunctionImpl.query.get_or_404(function_id)
+
+    if request.method == "POST":
+        benchmark_id = request.form.get("benchmark_id")
+        title = request.form.get("title")
+        description_html = request.form.get("description_html")
+
+        bench = Benchmark.query.get_or_404(benchmark_id)
+        bench.title = title
+        bench.description_html = description_html
+
+        db.session.commit()
+
+        return redirect(url_for("admin.show_benchs"))
 
     benchmark = (
         Benchmark.query
         .filter_by(function_impl_id=function_id)
         .first()
     )
-
-    if request.method == "POST":
-        benchmark_id     = request.form.get("benchmark_id")
-        title            = request.form.get("title")
-        description_html = request.form.get("description_html")
-        highlighted      = (request.form["highlighted"] == "yes")
-
-        bench                  = Benchmark.query.get_or_404(benchmark_id)
-        bench.title            = title
-        bench.description_html = description_html
-        bench.highlighted      = highlighted
-
-        db.session.commit()
-
-        return redirect(url_for("admin.show_benchs"))
 
     return render_template(
         "admin/actions/edit_function_benchmarks.html",
@@ -152,8 +147,7 @@ def add_function_benchmark():
     # FunctionImpls that DO NOT already have a benchmark
     functions_without_bench = (
         FunctionImpl.query
-        .outerjoin(Benchmark,
-                   Benchmark.function_impl_id == FunctionImpl.id)
+        .outerjoin(Benchmark)
         .filter(Benchmark.id.is_(None))
         .order_by(FunctionImpl.real_name)
         .all()
@@ -163,10 +157,9 @@ def add_function_benchmark():
         function_impl_id = int(request.form["function_impl_id"])
 
         bench = Benchmark(
-            function_impl_id = function_impl_id,
-            title            = request.form["title"],
-            description_html = request.form["description_html"],
-            highlighted      = (request.form["highlighted"] == "yes")
+            function_impl_id=function_impl_id,
+            title=request.form["title"],
+            description_html=request.form["description_html"],
         )
 
         db.session.add(bench)
@@ -510,13 +503,10 @@ def edit_dev(article_id):
 def show_get_started():
     plans = (
         GetStarted.query
-        .order_by(
-            GetStarted.priority.asc(),
-            GetStarted.id.asc(),
-        )
+        .order_by(GetStarted.created_at.desc())
         .all()
     )
-
+    
     return render_template(
         "admin/show/get_started.html",
         plans=plans,
@@ -524,74 +514,42 @@ def show_get_started():
 
 @bp.route("/get_started/<int:plan_id>", methods=["GET", "POST"])
 def edit_get_started(plan_id):
-
     plan = GetStarted.query.get_or_404(plan_id)
+   
+   if request.method == "POST":
+       plan.goal          = request.form["goal"]
+       plan..priority     = request.form["priority"]
+       plan.function_impl = request.form["function_impl"]
 
-    fns = (
-        FunctionImpl.query
-        .order_by(FunctionImpl.real_name)
-        .all()
-    )
+       db.session.commit()
 
-    if request.method == "POST":
-        plan.goal = request.form["goal"]
-
-        plan.priority = int(request.form["priority"]) if request.form.get("priority") else None
-
-        fn = (
-            FunctionImpl.query
-            .filter_by(id=request.form["function_impl"])
-            .first_or_404()
-        )
-
-        plan.function_impl = fn
-        db.session.commit()
-
-        return redirect(url_for("admin.show_get_started"))
+       return redirect(url_for("admin.show_get_started"))
 
     return render_template(
         "admin/actions/edit_get_started.html",
         plan=plan,
-        fns=fns,
     )
 
 @bp.route("/get_started/add", methods=["GET", "POST"])
 def add_get_started():
+   
+   if request.method == "POST":
 
-    fns = (
-        FunctionImpl.query
-        .outerjoin(
-                    GetStarted,
-                    GetStarted.function_impl_id == FunctionImpl.id
-                    )
-        .filter(GetStarted.id.is_(None))
-        .order_by(FunctionImpl.real_name)
-        .all()
-    )
+       fn = GetStarted(
+                        goal          = request.form["goal"],
+                        priority      = request.form["priority"],
+                        function_impl = request.form["function_impl"]
+                      )
 
-    if request.method == "POST":
+       db.session.add(fn)
+       db.session.commit()
 
-        fn = (
-            FunctionImpl.query
-            .filter_by(id=request.form["function_impl"])
-            .first_or_404()
-        )
-
-        plan = GetStarted(
-            goal     = request.form["goal"],
-            priority = int(request.form["priority"]) if request.form.get("priority") else None,
-            function_impl=fn,
-        )
-
-        db.session.add(plan)
-        db.session.commit()
-
-        return redirect(url_for("admin.show_get_started"))
+       return redirect(url_for("admin.show_get_started"))
 
     return render_template(
         "admin/actions/add_get_started.html",
-        fns=fns,
     )
+
 
 
 

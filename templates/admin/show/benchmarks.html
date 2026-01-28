@@ -29,6 +29,7 @@ Benchmarks | Admin
           <th>API</th>
           <th>Benchmark title</th>
           <th>Datasets</th>
+          <th>Highlighted</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -61,6 +62,10 @@ Benchmarks | Admin
               {% else %}
                 <em>—</em>
               {% endif %}
+            </td>
+
+            <td>
+                {{ bench.highlighted }}
             </td>
 
             <td>

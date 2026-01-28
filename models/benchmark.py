@@ -15,6 +15,7 @@ class Benchmark(db.Model):
 
     title = db.Column(db.String(256), nullable=False)
     description_html = db.Column(db.Text, nullable=False)
+    highlighted      = db.Column(db.Boolean, nullable=False)
 
     created_at = db.Column(
         db.DateTime,

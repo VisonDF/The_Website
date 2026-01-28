@@ -47,6 +47,28 @@ Edit benchmarks — {{ fn.real_name }} | Admin
           required
         >
       </div>
+
+      <div class="form-group">
+        <label>Highlight</label>
+        <select
+          name="highlighted"
+          required
+        >
+            <option value="">
+              — Highlights for Landing Benchmarks —
+            </option>
+
+            <option value="yes" {% if benchmark.highlight %} selected {% endif %} >
+            Yes
+            </option>
+
+            <option value="no" {% if not benchmark.highlight %} selected {% endif %}>
+            No
+            </option>
+
+        </select>
+      </div>
+
     </fieldset>
 
     <!-- =========================

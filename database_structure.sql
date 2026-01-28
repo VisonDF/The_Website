@@ -91,6 +91,8 @@ CREATE TABLE IF NOT EXISTS benchmark (
     title             VARCHAR(256) NOT NULL,
     description_html  LONGTEXT NOT NULL,
 
+    highlighted       BOOLEAN NOT NULL,
+
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     KEY idx_bench_impl (function_impl_id),
