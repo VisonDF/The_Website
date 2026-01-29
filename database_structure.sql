@@ -162,6 +162,8 @@ CREATE TABLE IF NOT EXISTS admin_user (
     UNIQUE KEY uq_admin_username (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
 CREATE TABLE IF NOT EXISTS dev (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     title             VARCHAR(256) NOT NULL,
@@ -170,6 +172,33 @@ CREATE TABLE IF NOT EXISTS dev (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+CREATE TABLE IF NOT EXISTS pipeline (
+    id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title             VARCHAR(256) NOT NULL,
+    description_html  LONGTEXT NOT NULL,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS pipeline_dataset (
+    pipeline_id   INT NOT NULL,
+    dataset_id    INT NOT NULL,
+
+    PRIMARY KEY (pipeline_id, dataset_id),
+
+    CONSTRAINT pl_bd_pipeline
+        FOREIGN KEY (pipeline_id)
+        REFERENCES pipeline(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT pl_bd_dataset
+        FOREIGN KEY (dataset_id)
+        REFERENCES dataset(id)
+        ON DELETE RESTRICT
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 

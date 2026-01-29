@@ -801,7 +801,7 @@ pre {
 .rotator-indicator span {
   width: 8px;
   height: 8px;
-  border-radius: 2px;
+  border-radius: 50%;
 
   background-color: var(--border-soft);
   opacity: 0.5;
@@ -1626,6 +1626,25 @@ code, pre {
     "Fira Code",
     "Source Code Pro",
     monospace;
+}
+
+.hero-rotator-indicator {
+  display: flex;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.hero-rotator-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-soft);
+  opacity: 0.4;
+}
+
+.hero-rotator-indicator span.active {
+  background-color: var(--accent);
+  opacity: 1;
 }
 
 

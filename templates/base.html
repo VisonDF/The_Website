@@ -109,6 +109,27 @@
         </script>
 
         <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const sentences = document.querySelectorAll(".rotator-sentence");
+          const dots = document.querySelectorAll(".hero-rotator-indicator span");
+        
+          if (!sentences.length || !dots.length) return;
+        
+          let index = 0;
+        
+          setInterval(() => {
+            sentences[index].classList.remove("active");
+            dots[index].classList.remove("active");
+        
+            index = (index + 1) % sentences.length;
+        
+            sentences[index].classList.add("active");
+            dots[index].classList.add("active");
+          }, 5000);
+        });
+        </script>
+
+        <script>
         function updatePreview() {
           if (!window.cmView) return;
         

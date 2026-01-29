@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add pipeline | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Add pipeline</h1>
+  </header>
+
+<form method="post" class="admin-form admin-form-wide">
+
+  <!-- =========================
+       Pipeline identity
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Benchmark pipeline</legend>
+
+    <div class="form-group">
+      <label>Pipeline title</label>
+      <input
+        type="text"
+        name="title"
+        required
+      >
+    </div>
+
+    <br>
+
+
+  </fieldset>
+
+  <!-- =========================
+       Pipeline narrative
+       ========================= -->
+  <fieldset class="form-section">
+    <legend>Pipeline description</legend>
+
+    <div class="form-group">
+      <label>
+        Description (HTML)
+        <button
+          type="button"
+          class="preview-toggle"
+          onclick="togglePreview()"
+        >
+          Preview
+        </button>
+      </label>
+
+      <div class="editor-preview-wrapper">
+
+        <textarea
+          id="description-editor"
+          name="description_html"
+          class="code-textarea code-textarea-large"
+          placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
+          oninput="updatePreview()"
+          required
+        ></textarea>
+
+        <div
+          id="description-preview"
+          class="html-preview"
+          hidden
+        ></div>
+
+      </div>
+
+      <small class="form-hint">
+        This HTML is rendered verbatim on the documentation page.
+      </small>
+    </div>
+  </fieldset>
+
+  <!-- =========================
+       Actions
+       ========================= -->
+  <div class="admin-actions admin-actions-sticky">
+    <button type="submit" class="btn-primary">
+      Create pipeline
+    </button>
+
+    <a href="{{ url_for('admin.show_pipeline') }}" class="btn-link">
+      Cancel
+    </a>
+  </div>
+
+</form>
+
+
+</main>
+{% endblock %}
+
+
+

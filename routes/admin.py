@@ -13,6 +13,8 @@ from models.benchmark import Benchmark
 from models.benchmark_dataset import BenchmarkDataset
 from models.dev import Dev
 from models.get_started import GetStarted
+from models.pipeline import Pipeline
+from models.pipeline_dataset import PipelineDataset
 from db import db
 from werkzeug.utils import secure_filename
 from collections import defaultdict
@@ -204,7 +206,7 @@ def edit_benchmark_datasets(benchmark_id):
         db.session.commit()
 
         return redirect(
-            url_for("admin.show_benchs", function_id=benchmark.function_impl_id)
+            url_for("admin.show_benchs")
         )
 
     return render_template(
@@ -593,7 +595,95 @@ def add_get_started():
         fns=fns,
     )
 
+@bp.route("/pipeline/show", methods=["GET"])
+def show_pipeline():
+    pipelines = (
+        Pipeline.query
+        .all()
+    )
 
+    return render_template(
+        "admin/show/pipeline.html",
+        pipelines=pipelines,
+    )
+
+@bp.route("/pipeline/add", methods=["GET", "POST"])
+def add_pipeline():
+    if request.method == "POST":
+        pipeline = Pipeline(
+            title=request.form["title"],
+            description_html=request.form.get("description_html"),
+        )
+        db.session.add(pipeline)
+        db.session.commit()
+
+        return redirect(url_for("admin.show_pipeline"))
+
+    return render_template(
+        "admin/actions/add_pipeline.html"
+    )
+
+@bp.route("/pipeline/<int:pipeline_id>", methods=["GET", "POST"])
+def edit_pipeline(pipeline_id):
+
+    pipeline = Pipeline.query.get_or_404(pipeline_id)
+    
+    if request.method == "POST":
+        pipeline.title            = request.form["title"]
+        pipeline.description_html = request.form.get("description_html")
+
+        db.session.commit()
+
+        return redirect(url_for("admin.show_pipeline"))
+
+    return render_template(
+        "admin/actions/edit_pipeline.html",
+        pipeline=pipeline
+    )
+
+@bp.route("/pipeline/<int:pipeline_id>/datasets", methods=["GET", "POST"])
+def edit_pipeline_datasets(pipeline_id):
+
+    pipeline = Pipeline.query.get_or_404(pipeline_id)
+    all_datasets = Dataset.query.all()
+
+    if request.method == "POST":
+        selected_ids = request.form.getlist("dataset_ids")
+
+        # Clear existing associations
+        PipelineDataset.query.filter_by(
+            pipeline_id=pipeline.id
+        ).delete()
+
+        # Add new associations
+        for ds_id in selected_ids:
+            db.session.add(
+                PipelineDataset(
+                    pipeline_id=pipeline.id,
+                    dataset_id=int(ds_id)
+                )
+            )
+
+        db.session.commit()
+
+        return redirect(
+            url_for("admin.show_pipeline")
+        )
+
+    return render_template(
+        "admin/actions/edit_pipeline_datasets.html",
+        pipeline=pipeline,
+        all_datasets=all_datasets,
+    )
+
+@bp.route("/pipeline/<int:pipeline_id>/delete", methods=["POST"])
+def delete_pipeline(pipeline_id):
+    pipeline = Pipeline.query.get_or_404(pipeline_id)
+
+    db.session.delete(pipeline)
+    db.session.commit()
+
+    return redirect(url_for("admin.show_pipeline"))
 
 
 

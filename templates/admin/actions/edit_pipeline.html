@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Edit benchmarks — {{ fn.real_name }} | Admin
+Edit pipeline — {{ pipeline.title }} | Admin
 {% endblock %}
 
 {% block content %}
@@ -10,72 +10,50 @@ Edit benchmarks — {{ fn.real_name }} | Admin
 
 
 <a
-  href="{{ url_for('admin.add_function_benchmark', function_id=fn.id) }}"
+  href="{{ url_for('admin.add_pipeline') }}"
   class="admin-link"
 >
-  + Add benchmark
+  + Add pipeline
 </a>
 
   <header class="admin-header">
-    <h1>Edit benchmark</h1>
+    <h1>Edit pipeline</h1>
     <p>
-      Function:
-      <strong>{{ fn.real_name }}</strong>
-      ({{ fn.api_level }} level)
+      Pipeline:
+      <strong>{{ pipeline.real_name }}</strong>
     </p>
   </header>
 
-  {% if benchmark %}
+  {% if pipeline %}
 <section class="container">
 
   <form method="post" class="admin-form admin-form-wide">
 
-    <input type="hidden" name="benchmark_id" value="{{ benchmark.id }}">
+    <input type="hidden" name="pipeline_id" value="{{ pipeline.id }}">
 
     <!-- =========================
-         Benchmark metadata
+         Pipeline metadata
          ========================= -->
     <fieldset class="form-section">
-      <legend>Benchmark metadata</legend>
+      <legend>Pipeline metadata</legend>
 
       <div class="form-group">
         <label>Title</label>
         <input
           type="text"
           name="title"
-          value="{{ benchmark.title }}"
+          value="{{ pipeline.title }}"
           required
         >
-      </div>
-
-      <div class="form-group">
-        <label>Highlight</label>
-        <select
-          name="highlighted"
-          required
-        >
-            <option value="">
-              — Highlights for Landing Benchmarks —
-            </option>
-
-            <option value="yes" {% if benchmark.highlight %} selected {% endif %} >
-            Yes
-            </option>
-
-            <option value="no" {% if not benchmark.highlight %} selected {% endif %}>
-            No
-            </option>
-
-        </select>
       </div>
 
     </fieldset>
 
     <!-- =========================
-         Benchmark narrative
+         Pipeline narrative
          ========================= -->
     <fieldset class="form-section">
-      <legend>Benchmark description</legend>
+      <legend>Pipeline description</legend>
 
       <div class="form-group">
         <label>
@@ -97,7 +75,7 @@ Edit benchmarks — {{ fn.real_name }} | Admin
             class="code-textarea code-textarea-large"
             oninput="updatePreview()"
             required
-          >{{ benchmark.description_html }}</textarea>
+          >{{ pipeline.description_html }}</textarea>
 
           <div
             id="description-preview"
@@ -118,11 +96,11 @@ Edit benchmarks — {{ fn.real_name }} | Admin
          ========================= -->
     <div class="admin-actions admin-actions-sticky">
       <button type="submit" class="btn-primary">
-        Save benchmark
+        Save pipeline
       </button>
 
       <a
-        href="{{ url_for('admin.show_benchs') }}"
+        href="{{ url_for('admin.show_pipeline') }}"
         class="btn-secondary"
       >
         Cancel
@@ -131,7 +109,8 @@ Edit benchmarks — {{ fn.real_name }} | Admin
           -
 
       <a
-        href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=benchmark.id) }}"
+        href="{{ url_for('admin.edit_pipeline_datasets', 
+                          pipeline_id=pipeline.id) }}"
         class="btn-secondary"
       >
         Edit datasets →
@@ -141,23 +120,23 @@ Edit benchmarks — {{ fn.real_name }} | Admin
   </form>
 
 </section>
-
     <section class="admin-danger-zone">
       <h2>Danger zone</h2>
       <p>
-        Deleting this function benchmark will permanently remove it.
+        Deleting this pipeline will permanently remove it.
         This action cannot be undone.
       </p>
     
       <form
         method="post"
-        action="{{ url_for('admin.delete_function_bench', function_id=fn.id) }}"
+        action="{{ url_for('admin.delete_pipeline', 
+                            pipeline_id=pipeline.id) }}"
         onsubmit="return confirm(
-          'Delete benchmark {{ benchmark.title }}? This cannot be undone.'
+          'Delete pipeline {{ pipeline.title }}? This cannot be undone.'
         );"
       >
         <button type="submit" class="btn-danger">
-          Delete function benchmark
+          Delete pipeline
         </button>
       </form>
     </section>

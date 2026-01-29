@@ -16,18 +16,9 @@ Get started · Kernel DataFrame
 
 <section>
 
-  {% set current_priority = None %}
-
   {% for item in items %}
 
-    {% if current_priority != item.priority %}
-      {% if not loop.first %}
-        </div>
-      {% endif %}
-
       <div class="card-grid">
-      {% set current_priority = item.priority %}
-    {% endif %}
 
         <a
           href="{{ url_for('docs.function_doc', function_id=item.function_impl.id) }}"
@@ -46,9 +37,7 @@ Get started · Kernel DataFrame
             </div>
       </a>
 
-    {% if loop.last %}
       </div>
-    {% endif %}
 
   {% endfor %}
 

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pipeline - Article
+{% endblock %}
+
+{% block content %}
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>{{ pipeline.title }}</h1>
+        </section>
+
+        <!-- Card Grid -->
+        <section class="container">
+        
+            {{ pipeline.description_html | safe }}
+
+        </section>
+
+        <br>
+
+{% endblock %}
+
+
+
+
+

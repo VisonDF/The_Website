@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Benchmark Highlights
+{% endblock %}
+
+{% block content %}
+
+<section class="container">
+
+  {% for bench in benchs %}
+
+      <div class="card-grid">
+
+        <a
+          href="{{ url_for('docs.function_doc', 
+                           function_id=bench.function_impl.id) }}#bench"
+        >
+
+            <div class="doc-card card-variant-{{ loop.index0 % 4 + 1 }}">
+
+              <h3>
+                {{ bench.function_impl.real_name }}
+              </h3>
+
+              <p>
+                {{ bench.function_impl.summary }}
+              </p>
+
+            </div>
+        </a>
+
+      </div>
+
+  {% endfor %}
+
+</section>
+
+{% endblock %}
+
+
+

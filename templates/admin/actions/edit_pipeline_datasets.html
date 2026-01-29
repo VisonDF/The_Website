@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Edit datasets — {{ benchmark.title }} | VisonDF
+Edit pipeline datasets — {{ pipeline.title }} | VisonDF
 {% endblock %}
 
 
@@ -10,9 +10,9 @@ Edit datasets — {{ benchmark.title }} | VisonDF
 <section class="container">
 
 
-<h1>Edit datasets for benchmark</h1>
+<h1>Edit datasets for pipeline</h1>
 
-<h2>{{ benchmark.title }}</h2>
+<h2>{{ pipeline.title }}</h2>
 
 <form method="post" class="admin-form admin-form-wide">
 
@@ -20,11 +20,11 @@ Edit datasets — {{ benchmark.title }} | VisonDF
        Dataset selection
        ========================= -->
   <fieldset class="form-section">
-    <legend>Datasets used by this benchmark</legend>
+    <legend>Datasets used by this pipeline</legend>
 
     <p class="form-hint">
-      Select the datasets referenced by this benchmark narrative.
-      These will be available for download on the documentation page.
+      Select the datasets referenced by this pipeline narrative.
+      These will be available for download on the pipeline page.
     </p>
 
     <div class="checkbox-list">
@@ -35,7 +35,7 @@ Edit datasets — {{ benchmark.title }} | VisonDF
             type="checkbox"
             name="dataset_ids"
             value="{{ ds.id }}"
-            {% if ds.id in benchmark.datasets | map(attribute="id") | list %}
+            {% if ds.id in pipeline.datasets | map(attribute="id") | list %}
               checked
             {% endif %}
           >
@@ -64,10 +64,10 @@ Edit datasets — {{ benchmark.title }} | VisonDF
     </button>
 
     <a
-      href="{{ url_for('admin.show_benchs') }}"
+      href="{{ url_for('admin.show_pipeline') }}"
       class="btn-link"
     >
-      Back to benchmark
+      Back to pipeline
     </a>
   </div>
 

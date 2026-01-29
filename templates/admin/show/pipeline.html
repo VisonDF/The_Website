@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pipeline | Admin
+{% endblock %}
+
+{% block content %}
+<main class="admin-page">
+
+  <header class="admin-header">
+    <h1>Pipelines</h1>
+    <p>
+      Read-only view of all pipelines.
+    </p>
+
+    <div class="admin-header-actions">
+      <a href="{{ url_for('admin.add_pipeline') }}" class="admin-link">
+        + Add Pipeline
+      </a> 
+    </div>
+  </header>
+
+  {% if pipelines %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Datasets</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pipeline in pipelines %}
+          <tr class="admin-table">
+            <td><strong>{{ pipeline.title }}</strong></td>
+            <td>
+              {% if pipeline.datasets %}
+                <ul class="inline-list">
+                  {% for ds in pipeline.datasets %}
+                    <li>
+                      {{ ds.name }} ({{ ds.version }})
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <em>—</em>
+              {% endif %}
+            </td>
+            <td>
+              {{ pipeline.created_at.strftime("%Y-%m-%d") }}
+            </td>
+            <td>
+              <a href="{{ url_for('admin.edit_pipeline', 
+                                  pipeline_id=pipeline.id) }}">
+                edit
+              </a>
+              ·
+              <a href="{{ url_for('admin.edit_pipeline_datasets', 
+                                   pipeline_id=pipeline.id) }}">
+                datasets
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No Pipeline.</p>
+  {% endif %}
+
+</main>
+{% endblock %}
+
+
+
+
+
