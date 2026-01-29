@@ -85,6 +85,28 @@ Edit Get Started | Admin
 
   </form>
 
+
+    <section class="admin-danger-zone">
+      <h2>Danger zone</h2>
+      <p>
+        Deleting this Get Started plan will permanently remove it.
+        This action cannot be undone.
+      </p>
+    
+      <form
+        method="post"
+        action="{{ url_for('admin.delete_get_started', 
+                            plan_id=plan.id) }}"
+        onsubmit="return confirm(
+          'Delete plan? This cannot be undone.'
+        );"
+      >
+        <button type="submit" class="btn-danger">
+          Delete plan
+        </button>
+      </form>
+    </section>
+
   <br>
 
 </main>

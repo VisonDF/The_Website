@@ -20,7 +20,7 @@ Edit Dev | Admin
       <input
         type="text"
         name="title"
-        value="{{ title }}"
+        value="{{ article.title }}"
         required
       >
     </div>
@@ -50,7 +50,7 @@ Edit Dev | Admin
           placeholder="<p>Describe the workload, hardware, metrics, and observations...</p>"
           oninput="updatePreview()"
           required
-          >{{ description_html }}</textarea>
+          >{{ article.description_html }}</textarea>
 
         <div
           id="description-preview"
@@ -81,6 +81,27 @@ Edit Dev | Admin
 
 </form>
 
+
+    <section class="admin-danger-zone">
+      <h2>Danger zone</h2>
+      <p>
+        Deleting this article will permanently remove it.
+        This action cannot be undone.
+      </p>
+    
+      <form
+        method="post"
+        action="{{ url_for('admin.delete_dev', 
+                            article_id=article.id) }}"
+        onsubmit="return confirm(
+          'Delete article? This cannot be undone.'
+        );"
+      >
+        <button type="submit" class="btn-danger">
+          Delete article
+        </button>
+      </form>
+    </section>
 
 </main>
 {% endblock %}

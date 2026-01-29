@@ -492,11 +492,11 @@ def add_dev():
 @bp.route("/dev/<int:article_id>", methods=["GET", "POST"])
 def edit_dev(article_id):
 
-    fn = Dev.query.get_or_404(article_id)
+    article = Dev.query.get_or_404(article_id)
     
     if request.method == "POST":
-        fn.title            = request.form["title"]
-        fn.description_html = request.form.get("description_html")
+        article.title            = request.form["title"]
+        article.description_html = request.form.get("description_html")
 
         db.session.commit()
 
@@ -504,9 +504,17 @@ def edit_dev(article_id):
 
     return render_template(
         "admin/actions/edit_dev.html",
-        title=fn.title,
-        description_html=fn.description_html
+        article=article
     )
+
+@bp.route("/dev/<int:article_id>/delete", methods=["POST"])
+def delete_dev(article_id):
+    article = Dev.query.get_or_404(article_id)
+
+    db.session.delete(article)
+    db.session.commit()
+
+    return redirect(url_for("admin.show_dev"))
 
 @bp.route("/get_started/show", methods=["GET"])
 def show_get_started():
@@ -594,6 +602,15 @@ def add_get_started():
         "admin/actions/add_get_started.html",
         fns=fns,
     )
+
+@bp.route("/get_started/<int:plan_id>/delete", methods=["POST"])
+def delete_get_started(plan_id):
+    plan = GetStarted.query.get_or_404(plan_id)
+
+    db.session.delete(plan)
+    db.session.commit()
+
+    return redirect(url_for("admin.show_get_started"))
 
 @bp.route("/pipeline/show", methods=["GET"])
 def show_pipeline():

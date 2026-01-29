@@ -11,7 +11,8 @@
     {% set groups = {
       'net_gpu': [],
       'net_cpu': [],
-      'local': []
+      'local_cpu': [],
+      'local_gpu': []
     } %}
     
     {% for f in siblings %}
@@ -19,8 +20,10 @@
         {% set _ = groups['net_gpu'].append(f) %}
       {% elif f.network %}
         {% set _ = groups['net_cpu'].append(f) %}
+      {% elif f.gpu %}
+        {% set _ = groups['local_gpu'].append(f) %}
       {% else %}
-        {% set _ = groups['local'].append(f) %}
+        {% set _ = groups['local_cpu'].append(f) %}
       {% endif %}
     {% endfor %}
 
@@ -52,13 +55,22 @@
             </optgroup>
           {% endif %}
 
-          {% if groups.local %}
+          {% if groups.local_cpu %}
             <optgroup label="Local (CPU)">
-              {% for f in groups.local %}
+              {% for f in groups.local_cpu %}
                 <option value="{{ f.id }}">{{ f.real_name }}</option>
               {% endfor %}
             </optgroup>
           {% endif %}
+
+          {% if groups.local_gpu %}
+            <optgroup label="Local (GPU)">
+              {% for f in groups.local_gpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
         </select>
       </div>
     </div>
@@ -124,13 +136,22 @@
             </optgroup>
           {% endif %}
 
-          {% if groups.local %}
+          {% if groups.local_cpu %}
             <optgroup label="Local (CPU)">
-              {% for f in groups.local %}
+              {% for f in groups.local_cpu %}
                 <option value="{{ f.id }}">{{ f.real_name }}</option>
               {% endfor %}
             </optgroup>
           {% endif %}
+
+          {% if groups.local_gpu %}
+            <optgroup label="Local (GPU)">
+              {% for f in groups.local_gpu %}
+                <option value="{{ f.id }}">{{ f.real_name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+
         </select>
       </div>
     </div>
