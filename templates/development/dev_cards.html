@@ -13,7 +13,7 @@ Dev
 
         <!-- Card Grid -->
         <section class="container">
-            <div class="card-grid-article">
+            <div class="card-grid">
 
                 {% for article in articles %}
 
@@ -21,7 +21,7 @@ Dev
 
                     <a href="{{ url_for('dev.article', 
                                         cur_id=article.id) }}">
-                        <div class="doc-card-article card-variant-{{ variant }}">
+                        <div class="doc-card card-variant-{{ variant }}">
                             <h3>{{ article.title }}</h3>
                             <p>
                               {{ article.description_html

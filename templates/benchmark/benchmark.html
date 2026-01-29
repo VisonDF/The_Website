@@ -6,11 +6,14 @@ Benchmark Highlights
 
 {% block content %}
 
+<br style="margin-top:1.5cm;">
+
 <section class="container">
 
-  {% for bench in benchs %}
-
       <div class="card-grid">
+
+
+  {% for bench in benchs %}
 
         <a
           href="{{ url_for('docs.function_doc', 
@@ -30,11 +33,13 @@ Benchmark Highlights
             </div>
         </a>
 
-      </div>
-
   {% endfor %}
 
+      </div>
+
 </section>
+
+<br>
 
 {% endblock %}
 

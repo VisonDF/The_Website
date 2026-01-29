@@ -6,10 +6,15 @@ Pipeline - Article
 
 {% block content %}
 
+<section class="container">
+
         <!-- Hero -->
         <section class="hero">
             <h1>{{ pipeline.title }}</h1>
+            <i>Dataset(s) used is/are available at the end of this section</i>
         </section>
+
+        <br>
 
         <!-- Card Grid -->
         <section class="container">
@@ -19,6 +24,23 @@ Pipeline - Article
         </section>
 
         <br>
+
+        {% if pipeline.datasets %}
+          <div class="benchmark-datasets">
+            <h4>Datasets used</h4>
+            <ul>
+              {% for dataset in pipeline.datasets %}
+                <li>
+                  <a href="{{ dataset.download_url }}">
+                    ⬇ {{ dataset.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+</section>
 
 {% endblock %}
 

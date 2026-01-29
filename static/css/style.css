@@ -1648,3 +1648,9 @@ code, pre {
 }
 
 
+.doc-card-article.card-variant-1 { background-color: var(--card-1); }
+.doc-card-article.card-variant-2 { background-color: var(--card-2); }
+.doc-card-article.card-variant-3 { background-color: var(--card-3); }
+.doc-card-article.card-variant-4 { background-color: var(--card-4); }
+
+

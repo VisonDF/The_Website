@@ -16,9 +16,10 @@ Get started · Kernel DataFrame
 
 <section>
 
-  {% for item in items %}
+  <section class="container">
+    <div class="card-grid">
 
-      <div class="card-grid">
+  {% for item in items %}
 
         <a
           href="{{ url_for('docs.function_doc', function_id=item.function_impl.id) }}"
@@ -35,11 +36,12 @@ Get started · Kernel DataFrame
               </p>
 
             </div>
-      </a>
-
-      </div>
+        </a>
 
   {% endfor %}
+
+    </div>
+  </section>
 
 </section>
 
