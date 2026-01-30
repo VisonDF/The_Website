@@ -1,11 +1,11 @@
 
 ```
 
-python3 -m menv
+python3 -m venv menv
 
 source menv/bin/activate
 
-pip install requirements.txt
+pip install -r requirements.txt
 
 node -v
 
