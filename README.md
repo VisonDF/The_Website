@@ -62,7 +62,17 @@ mysql -u df_user -p df_engine_site < database_structure.sql
 
 ```
 
+```
 
+// update set_pass.py to give strong password for website admin
+python3 set_pass.py
+
+```
+
+```
+gunicorn -w 2 -b 127.0.0.1:8089 run:app
+
+```
 
 
 
