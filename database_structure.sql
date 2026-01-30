@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS dev (
 
 
 CREATE TABLE IF NOT EXISTS pipeline (
-    id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id                INT AUTO_INCREMENT PRIMARY KEY,
     title             VARCHAR(256) NOT NULL,
     description_html  LONGTEXT NOT NULL,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
