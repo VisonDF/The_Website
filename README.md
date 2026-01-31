@@ -70,11 +70,38 @@ python3 set_pass.py
 ```
 
 ```
-gunicorn -w 2 -b 127.0.0.1:8089 run:app
+gunicorn -w 4 -b 0.0.0.0:8089 run:app
 
 ```
 
+Or making it persistent
 
+```
+[Unit]
+Description=VisonDF Website (Gunicorn)
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+
+WorkingDirectory=/root/The_Website
+Environment="PATH=/root/The_Website/menv/bin"
+Environment="FLASK_ENV=production"
+
+ExecStart=/root/The_Website/menv/bin/gunicorn \
+    --workers 4 \
+    --threads 4 \
+    --bind 0.0.0.0:8089 \
+    run:app
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+```
 
 
 
