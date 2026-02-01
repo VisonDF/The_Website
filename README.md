@@ -103,5 +103,46 @@ WantedBy=multi-user.target
 
 ```
 
+```
+upstream backend {
+    server 127.0.0.1:8089;
+    keepalive 64;
+}
+
+server {
+    listen 80;
+    server_name visondf.dev www.visondf.dev;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name visondf.dev www.visondf.dev;
+
+    ssl_certificate /etc/letsencrypt/live/visondf.dev/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/visondf.dev/privkey.pem;
+
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1h;
+    ssl_session_tickets off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+}
+
+```
+
+
+
 
 
