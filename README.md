@@ -105,12 +105,25 @@ WantedBy=multi-user.target
 ```
 
 ```
+mkdir -p /var/www/visondf
+mv /root/The_Website /var/www/visondf/
+chown -R www-data:www-data /var/www/visondf
+ls -ld /var/www /var/www/visondf /var/www/visondf/The_Website
+expected:
+drwxr-xr-x www-data www-data /var/www/visondf
+```
+
+good dfengine.conf
+
+```
+
 upstream backend {
     server 127.0.0.1:8089;
     keepalive 64;
 }
 
 server {
+
     listen 80;
     server_name visondf.dev www.visondf.dev;
     return 301 https://$host$request_uri;
@@ -139,6 +152,13 @@ server {
         proxy_connect_timeout 2s;
         proxy_read_timeout 30s;
     }
+
+    location /static/ {
+        alias /var/www/visondf/The_Website/static/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
 }
 
 ```
