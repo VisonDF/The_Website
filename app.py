@@ -1,7 +1,6 @@
 from functools import lru_cache
 from sqlalchemy import func
 from flask import Flask
-from flask_login import LoginManager
 from db import db
 from routes import (
                         main, 
@@ -16,8 +15,8 @@ from routes import (
 from models.benchmark_dataset import BenchmarkDataset
 from models.function_impl import FunctionImpl
 from models.admin_user import AdminUser
-
-login_manager = LoginManager()
+from flask_caching import Cache
+from extensions import cache, login_manager
 
 @lru_cache(maxsize=4096)
 def dataset_usage_count(dataset_id):
@@ -53,6 +52,8 @@ def create_app():
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         db.session.remove()
+
+    cache.init_app(app)
 
     login_manager.init_app(app)
     login_manager.login_view = "auth.login"

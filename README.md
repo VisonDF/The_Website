@@ -90,9 +90,10 @@ Environment="PATH=/root/The_Website/menv/bin"
 Environment="FLASK_ENV=production"
 
 ExecStart=/root/The_Website/menv/bin/gunicorn \
-    --workers 4 \
-    --threads 4 \
-    --bind 0.0.0.0:8089 \
+    --worker-class gthread \
+    --workers 2 \
+    --threads 8 \
+    --bind 127.0.0.1:8089 \
     run:app
 
 Restart=always
