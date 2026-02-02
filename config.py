@@ -1,10 +1,18 @@
 from datetime import timedelta
 
 class Config:
-    SECRET_KEY = "dev-secret"
+    SECRET_KEY = "devSDMSZE343DF"
     SQLALCHEMY_DATABASE_URI = (
-        "mysql+pymysql://df_user:strong_password_here@localhost/df_engine_site"
+        "mysql+pymysql://df_user:pLM45!LqlpZ@localhost/df_engine_site"
     )    
+
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_size": 10,          # persistent connections
+        "max_overflow": 20,       # burst capacity
+        "pool_recycle": 1800,     # avoid MySQL timeout issues
+        "pool_pre_ping": True,    # auto-reconnect dead conns
+    }
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SESSION_PERMANENT=True
