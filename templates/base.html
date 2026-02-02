@@ -21,15 +21,8 @@
             content="A dataframe engine designed around explicit execution costs, predictability, and control."
         />
 
-
-        <link rel="preload"
-              href="{{ url_for('static', filename='css/style.css') }}"
-              as="style"
-              onload="this.onload=null;this.rel='stylesheet'">
-        <noscript>
-          <link rel="stylesheet"
-                href="{{ url_for('static', filename='css/style.css') }}">
-        </noscript>
+        <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 
         <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
 

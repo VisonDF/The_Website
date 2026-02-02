@@ -238,5 +238,15 @@ http {
 
 ```
 
+Redis setup:
+
+```
+
+sudo apt install redis-server
+sudo systemctl enable redis-server
+
+```
+
+
 
 
