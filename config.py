@@ -1,9 +1,9 @@
 from datetime import timedelta
 
 class Config:
-    SECRET_KEY = "devSDMSZE343DF"
+    SECRET_KEY = "PASSWORD"
     SQLALCHEMY_DATABASE_URI = (
-        "mysql+pymysql://df_user:pLM45!LqlpZ@localhost/df_engine_site"
+        "mysql+pymysql://df_user:PASSWORD@localhost/df_engine_site"
     )    
 
     SQLALCHEMY_ENGINE_OPTIONS = {
