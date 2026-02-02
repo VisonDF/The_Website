@@ -22,7 +22,14 @@
         />
 
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="preload"
+              href="{{ url_for('static', filename='css/style.css') }}"
+              as="style"
+              onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+          <link rel="stylesheet"
+                href="{{ url_for('static', filename='css/style.css') }}">
+        </noscript>
 
         <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
 
@@ -39,9 +46,12 @@
                         <img
                             src="{{ url_for('static', filename='logo_lightmode.svg') }}"
                             alt="Engine logo"
-                            height="32"
                             style="vertical-align: middle; margin-right: 0.5em"
                             class="logo-img"
+                            height="32"
+                            width="32"
+                            loading="eager"
+                            decoding="async"
                         />
                         <span>VisonDF</span>
                     </a>
@@ -71,11 +81,11 @@
           </div>
         {% endif %}
 
-        <script src="{{ url_for('static', filename='prism/prism.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='prism/components/prism-clike.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='prism/components/prism-c.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='prism/components/prism-cpp.min.js') }}"></script>
-        <script>
+        <script src="{{ url_for('static', filename='prism/prism.min.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-clike.min.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-c.min.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='prism/components/prism-cpp.min.js') }}" defer></script>
+        <script defer>
           Prism.highlightAll();
         </script>
 
