@@ -3,10 +3,12 @@ from models.function_family import FunctionFamily
 from models.function_impl import FunctionImpl
 from models.benchmark import Benchmark
 from models.benchmark_dataset import BenchmarkDataset
+from extensions import cache
 
 bp = Blueprint("docs", __name__)
 
 @bp.route("/")
+@cache.cached(timeout=300, query_string=False)
 def index():
     return render_template("docs/index_docs.html")
 
@@ -23,6 +25,7 @@ def show_families(lvl):
                            family="")
 
 @bp.route("/<lvl>+<slug>+<network>+<gpu>")
+@cache.cached(timeout=300, query_string=False)
 def show_functions(lvl, slug, network, gpu):
 
     if lvl != 'low' and lvl != 'high':
@@ -51,6 +54,7 @@ def show_functions(lvl, slug, network, gpu):
                            gpu=gpu)
 
 @bp.route("/function/<int:function_id>")
+@cache.cached(timeout=300, query_string=False)
 def function_doc(function_id):
     fn = FunctionImpl.query.get_or_404(function_id)
 
