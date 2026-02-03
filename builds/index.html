@@ -1,5 +1,64 @@
-{% extends "base.html" %}
-{% block content %}
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <script>
+          (function () {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              document.documentElement.dataset.theme = theme;
+            }
+          })();
+        </script>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>YourEngine — A dataframe engine built for control</title>
+        
+        <meta
+            name="description"
+            content="A dataframe engine designed around explicit execution costs, predictability, and control."
+        />
+
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+
+    </head>
+
+    <body>
+        <!-- =========================
+       Top Navigation
+       ========================= -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="logo">
+                    <a href="/">
+                        <img
+                            src="/static/logo_lightmode.svg"
+                            alt="Engine logo"
+                            style="vertical-align: middle; margin-right: 0.5em"
+                            class="logo-img"
+                            height="32"
+                            width="32"
+                            loading="eager"
+                            decoding="async"
+                        />
+                        <span>VisonDF</span>
+                    </a>
+                </div>
+
+                <nav>
+                    <a href="/docs">Docs</a>
+                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                      ☾
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        
 
         <!-- =========================
        Hero
@@ -38,12 +97,12 @@
         
             <div class="code-panel">
               <div class="code-actions">
-                <a class="btn primary" href="get_started">Get Started</a>
-                <a class="btn" href="benchmark">Benchmarks</a>
+                <a class="btn primary" href="/get_started">Get Started</a>
+                <a class="btn" href="/benchmark">Benchmarks</a>
                 <a class="btn" href="https://github.com/visonDF/visonDF">GitHub</a>
               </div>
        
-              <a href="{{ url_for('docs.index') }}" class="code-rotator-link">
+              <a href="/docs" class="code-rotator-link">
               <div class="code-rotator">
             
                 <pre class="code-block active">
@@ -103,7 +162,7 @@
                 Benchmarks are designed to measure predictability, not just
                 throughput.
             </p>
-            <a href="benchmark">benchmarks →</a>
+            <a href="/benchmark">benchmarks →</a>
         </section>
 
         <!-- =========================
@@ -114,7 +173,7 @@
             <p>
                 Pipelines is a collection of real data workloads executed with visonDF, designed to expose performance trade-offs and give users a concrete mental model of how and when execution costs are paid.            
             </p>
-            <a href="pipeline">pipelines →</a>
+            <a href="/pipeline">pipelines →</a>
         </section>
 
         <!-- =========================
@@ -125,7 +184,7 @@
             <p>
             Roadmap &amp; Architecture 
             </p>
-            <a href="dev">development →</a>
+            <a href="/dev">development →</a>
         </section>
 
 <script>
@@ -139,9 +198,21 @@
   }, 5000);
 </script>
 
-{% endblock %}
 
 
+        <script defer src="/static/js/main.js"></script>
+        <script defer src="/static/prism/prism.min.js"></script>
+        <script defer src="/static/prism/components/prism-clike.min.js"></script>
+        <script defer src="/static/prism/components/prism-c.min.js"></script>
+        <script defer src="/static/prism/components/prism-cpp.min.js"></script>
+        <script defer>
+          window.addEventListener("DOMContentLoaded", () => {
+             if (window.Prism) Prism.highlightAll();
+           });
+        </script>
+
+    </body>
+</html>
 
 
 

@@ -2,16 +2,7 @@ from functools import lru_cache
 from sqlalchemy import func
 from flask import Flask
 from db import db
-from routes import (
-                        main, 
-                        docs, 
-                        get_started, 
-                        admin, 
-                        auth, 
-                        dev, 
-                        benchmark,
-                        pipeline
-                   )
+from routes import admin, auth
 from models.benchmark_dataset import BenchmarkDataset
 from models.function_impl import FunctionImpl
 from models.admin_user import AdminUser
@@ -65,12 +56,6 @@ def create_app():
     app.jinja_env.filters["dataset_usage_count"] = dataset_usage_count
     app.jinja_env.filters["function_family_usage_count"] = function_family_usage_count
 
-    app.register_blueprint(main.bp)
-    app.register_blueprint(pipeline.bp,    url_prefix="/pipeline")
-    app.register_blueprint(dev.bp,         url_prefix="/dev")
-    app.register_blueprint(benchmark.bp,   url_prefix="/benchmark")
-    app.register_blueprint(docs.bp,        url_prefix="/docs")
-    app.register_blueprint(get_started.bp, url_prefix="/get_started")
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp, url_prefix="/admin")
 

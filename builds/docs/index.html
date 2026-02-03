@@ -1,10 +1,66 @@
-{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+    <head>
 
-{% block title %}
+        <script>
+          (function () {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              document.documentElement.dataset.theme = theme;
+            }
+          })();
+        </script>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
 API Select
-{% endblock %}
+</title>
+        
+        <meta
+            name="description"
+            content="A dataframe engine designed around explicit execution costs, predictability, and control."
+        />
 
-{% block content %}
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+
+    </head>
+
+    <body>
+        <!-- =========================
+       Top Navigation
+       ========================= -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="logo">
+                    <a href="/">
+                        <img
+                            src="/static/logo_lightmode.svg"
+                            alt="Engine logo"
+                            style="vertical-align: middle; margin-right: 0.5em"
+                            class="logo-img"
+                            height="32"
+                            width="32"
+                            loading="eager"
+                            decoding="async"
+                        />
+                        <span>VisonDF</span>
+                    </a>
+                </div>
+
+                <nav>
+                    <a href="/docs">Docs</a>
+                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                      ☾
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        
 
         <!-- ================================
      Hero
@@ -26,7 +82,7 @@ API Select
                 <!-- High-Level API -->
 
                 <a
-                    href="{{ url_for('docs.show_families', lvl='high') }}"
+                    href="/docs/show_families/high"
                 >
 
                     <div class="box1">
@@ -54,7 +110,7 @@ API Select
                 </a>
 
                 <a
-                    href="{{ url_for('docs.show_families', lvl='low') }}"
+                    href="/docs/show_families/low"
                 >
 
                     <div class="box1">
@@ -96,7 +152,12 @@ API Select
         </section>
         <br/>
 
-{% endblock %}
+
+
+        <script defer src="/static/js/main.js"></script>
+
+    </body>
+</html>
 
 
 

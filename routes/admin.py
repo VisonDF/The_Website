@@ -19,6 +19,30 @@ from db import db
 from werkzeug.utils import secure_filename
 from collections import defaultdict
 import os
+from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
+
+env = Environment(
+    loader=FileSystemLoader("templates"),
+    autoescape=True,
+)
+
+BUILD_DIR = Path("builds")
+BUILD_DIR.mkdir(exist_ok=True)
+
+NETWORK = ["any", "yes", "no"]
+GPU     = ["any", "yes", "no"]
+
+FILTER_COMBINATIONS = [
+    "anyany",
+    "yesany",
+    "anyyes",
+    "yesyes",
+    "noany",
+    "anyno",
+    "nono",
+    "noyes",
+]
 
 bp = Blueprint("admin", __name__)
 
@@ -54,6 +78,25 @@ def edit_function_impl(function_id):
 
         db.session.commit()
 
+        benchmark = fn.benchmark
+
+        siblings = (
+            FunctionImpl.query
+            .filter_by(family_id=fn.family_id)
+            .filter(FunctionImpl.id != fn.id)
+            .all()
+        )
+
+        html = env.get_template("docs/function.html").render(
+            fn=fn,
+            siblings=siblings,
+            benchmark=benchmark
+        )
+
+        out_dir = BUILD_DIR / "function_doc" / fn.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_function_impl"))
 
     return render_template(
@@ -70,6 +113,36 @@ def delete_function_impl(function_id):
     db.session.delete(fn)
     db.session.commit()
 
+    all_fns = (
+        FunctionImpl.query
+        .filter_by(api_level=fn.api_level, family_id=fn.family_id)
+        .all()
+    )
+
+    base = BUILD_DIR / "docs" / "show_functions" / fn.family.id / fn.api_level
+
+    for network in NETWORK:
+        for gpu in GPU:
+            filtered = [
+                f for f in all_fns
+                if (network == "any" or f.network == (network == "yes"))
+                and (gpu == "any" or f.gpu == (gpu == "yes"))
+            ]
+
+            html = env.get_template("docs/doc_cards.html").render(
+                lvl=api_level,
+                family=True,
+                network=network,
+                gpu=gpu,
+                cards=filtered,
+            )
+
+            out_dir = base / f"{network}{gpu}"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / "index.html").write_text(html, encoding="utf-8")
+
+    os.remove(BUILD_DIR / "function_doc" / function_id)
+
     return redirect(url_for("admin.show_function_impl"))
 
 @bp.route("/f_impl/add", methods=["GET", "POST"])
@@ -79,14 +152,14 @@ def add_function_impl():
 
     if request.method == "POST":
         fn = FunctionImpl(
-            real_name        = request.form["real_name"],
-            api_level        = request.form["api_level"],
-            family_id        = int(request.form["family_id"]),
-            signature_html   = request.form.get("signature_html"),
-            description_html = request.form.get("description_html"),
-            network          = True if request.form.get('network') == "Yes" else False,
-            gpu              = True if request.form.get('gpu') == "Yes" else False,
-            summary          = request.form["summary"],
+            real_name=request.form["real_name"],
+            api_level=request.form["api_level"],
+            family_id=int(request.form["family_id"]),
+            signature_html=request.form.get("signature_html"),
+            description_html=request.form.get("description_html"),
+            network=request.form.get("network") == "Yes",
+            gpu=request.form.get("gpu") == "Yes",
+            summary=request.form["summary"],
             default_dataset_id=(
                 int(request.form["default_dataset_id"])
                 if request.form.get("default_dataset_id")
@@ -97,7 +170,57 @@ def add_function_impl():
         db.session.add(fn)
         db.session.commit()
 
-        # Redirect to edit page immediately
+        api_level = request.form["api_level"]
+        family_id = int(request.form["family_id"])
+
+        # Fetch all functions for this family + level
+        all_fns = (
+            FunctionImpl.query
+            .filter_by(api_level=api_level, family_id=family_id)
+            .all()
+        )
+
+        base = BUILD_DIR / "docs" / "show_functions" / family_id / api_level
+
+        for network in NETWORK:
+            for gpu in GPU:
+                filtered = [
+                    f for f in all_fns
+                    if (network == "any" or f.network == (network == "yes"))
+                    and (gpu == "any" or f.gpu == (gpu == "yes"))
+                ]
+
+                html = env.get_template("docs/doc_cards.html").render(
+                    lvl=api_level,
+                    family=True,
+                    network=network,
+                    gpu=gpu,
+                    cards=filtered,
+                )
+
+                out_dir = base / f"{network}{gpu}"
+                out_dir.mkdir(parents=True, exist_ok=True)
+                (out_dir / "index.html").write_text(html, encoding="utf-8")
+        
+        benchmark = fn.benchmark
+
+        siblings = (
+            FunctionImpl.query
+            .filter_by(family_id=fn.family_id)
+            .filter(FunctionImpl.id != fn.id)
+            .all()
+        )
+
+        html = env.get_template("docs/function.html").render(
+            fn=fn,
+            siblings=siblings,
+            benchmark=benchmark
+        )
+
+        out_dir = BUILD_DIR / "function_doc" / fn.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_function_impl", function_id=fn.id))
 
     return render_template(
@@ -130,6 +253,25 @@ def edit_bench(function_id):
 
         db.session.commit()
 
+        benchmark = fn.benchmark
+
+        siblings = (
+            FunctionImpl.query
+            .filter_by(family_id=fn.family_id)
+            .filter(FunctionImpl.id != fn.id)
+            .all()
+        )
+
+        html = env.get_template("docs/function.html").render(
+            fn=fn,
+            siblings=siblings,
+            benchmark=benchmark
+        )
+
+        out_dir = BUILD_DIR / "function_doc" / fn.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_benchs"))
 
     return render_template(
@@ -145,10 +287,11 @@ def delete_function_bench(function_id):
     db.session.delete(fn)
     db.session.commit()
 
+
+
     return redirect(url_for("admin.show_function_impl"))
 
 @bp.route("/f_bench/add", methods=["GET", "POST"])
-@login_required
 def add_function_benchmark():
 
     # FunctionImpls that DO NOT already have a benchmark
@@ -173,6 +316,25 @@ def add_function_benchmark():
 
         db.session.add(bench)
         db.session.commit()
+
+        benchmark = fn.benchmark
+
+        siblings = (
+            FunctionImpl.query
+            .filter_by(family_id=function_impl_id)
+            .filter(FunctionImpl.id != fn.id)
+            .all()
+        )
+
+        html = env.get_template("docs/function.html").render(
+            fn=fn,
+            siblings=siblings,
+            benchmark=benchmark
+        )
+
+        out_dir = BUILD_DIR / "function_doc" / fn.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
 
         return redirect(url_for("admin.show_benchs"))
 
@@ -204,6 +366,25 @@ def edit_benchmark_datasets(benchmark_id):
             )
 
         db.session.commit()
+
+        benchmark = fn.benchmark
+
+        siblings = (
+            FunctionImpl.query
+            .filter_by(family_id=function_impl_id)
+            .filter(FunctionImpl.id != fn.id)
+            .all()
+        )
+
+        html = env.get_template("docs/function.html").render(
+            fn=fn,
+            siblings=siblings,
+            benchmark=benchmark
+        )
+
+        out_dir = BUILD_DIR / "function_doc" / fn.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
 
         return redirect(
             url_for("admin.show_benchs")
@@ -331,6 +512,9 @@ def taxonomy():
             new_family_id = request.form.get(field_name)
 
             if new_family_id and int(new_family_id) != fn.family_id:
+
+
+
                 fn.family_id = int(new_family_id)
 
         db.session.commit()
@@ -359,6 +543,54 @@ def add_function_family():
         db.session.add(family)
         db.session.commit()
 
+        # -------------------------
+        # Rebuild family listings
+        # -------------------------
+        families = (
+            FunctionFamily.query
+            .order_by(FunctionFamily.display_name)
+            .all()
+        )
+
+        out_families_base = BUILD_DIR / "docs" / "show_families"
+
+        for lvl in ("low", "high"):
+            html = env.get_template("docs/doc_cards.html").render(
+                lvl=lvl,
+                family=False,
+                cards=families,
+            )
+
+            out_dir = out_families_base / lvl
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / "index.html").write_text(html, encoding="utf-8")
+
+        # -------------------------
+        # Create function skeleton dirs
+        # -------------------------
+        out_functions_base = (
+            BUILD_DIR
+            / "docs"
+            / "show_functions"
+            / family.id
+        )
+
+        FILTER_COMBINATIONS = [
+            "anyany",
+            "yesany",
+            "anyyes",
+            "yesyes",
+            "noany",
+            "anyno",
+            "nono",
+            "noyes",
+        ]
+
+        for lvl in ("low", "high"):
+            for combo in FILTER_COMBINATIONS:
+                dir_path = out_functions_base / lvl / combo
+                dir_path.mkdir(parents=True, exist_ok=True)
+
         return redirect(url_for("admin.show_function_family"))
 
     families = (
@@ -377,11 +609,32 @@ def edit_function_family(family_id):
     family = FunctionFamily.query.get_or_404(family_id)
 
     if request.method == "POST":
+
+        old_slug = family.slug
         family.slug = request.form["slug"]
         family.display_name = request.form["display_name"]
         family.description = request.form.get("description")
 
         db.session.commit()
+
+        families = (
+            FunctionFamily.query
+            .order_by(FunctionFamily.display_name)
+            .all()
+        )
+
+        out_base = BUILD_DIR / "docs" / "show_families"
+
+        for lvl in ("low", "high"):
+            html = env.get_template("docs/doc_cards.html").render(
+                lvl=lvl,
+                family=False,
+                cards=families,
+            )
+
+            out_dir = out_base / lvl
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / "index.html").write_text(html, encoding="utf-8")
 
         return redirect(url_for("admin.show_function_family"))
 
@@ -405,6 +658,27 @@ def delete_function_family(family_id):
 
     db.session.delete(family)
     db.session.commit()
+
+    families = (
+        FunctionFamily.query
+        .order_by(FunctionFamily.display_name)
+        .all()
+    )
+
+    out_base = BUILD_DIR / "docs" / "show_families"
+
+    for lvl in ("low", "high"):
+        html = env.get_template("docs/doc_cards.html").render(
+            lvl=lvl,
+            family=False,
+            cards=families,
+        )
+
+        out_dir = out_base / lvl
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
+    os.remove(BUILD_DIR / "show_functions" / family_id)
 
     return redirect(url_for("admin.add_function_family"))
 
@@ -483,6 +757,23 @@ def add_dev():
         db.session.add(article)
         db.session.commit()
 
+        articles = Dev.query.all()
+
+        base = BUILD_DIR / "dev"
+        
+        html = env.get_template("dev/dev_cards.html").render(
+            articles=articles
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "show_dev/index.html").write_text(html, encoding="utf-8")
+
+        html = env.get_template("dev/dev.html").render(
+            article=article
+        )
+        out_dir = base / "dev" / article.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_dev"))
 
     return render_template(
@@ -500,6 +791,23 @@ def edit_dev(article_id):
 
         db.session.commit()
 
+        articles = Dev.query.all()
+
+        base = BUILD_DIR / "dev"
+        
+        html = env.get_template("dev/dev_cards.html").render(
+            articles=articles
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "show_dev/index.html").write_text(html, encoding="utf-8")
+
+        html = env.get_template("dev/dev.html").render(
+            article=article
+        )
+        out_dir = base / "dev" / article.id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+       
         return redirect(url_for("admin.show_dev"))
 
     return render_template(
@@ -513,6 +821,18 @@ def delete_dev(article_id):
 
     db.session.delete(article)
     db.session.commit()
+
+    articles = Dev.query.all()
+
+    base = BUILD_DIR / "dev"
+    
+    html = env.get_template("dev/dev_cards.html").render(
+        articles=articles
+    )
+    base.mkdir(parents=True, exist_ok=True)
+    (base / "show_dev/index.html").write_text(html, encoding="utf-8")
+
+    os.remove(BUILD_DIR / "dev/dev" / article_id)
 
     return redirect(url_for("admin.show_dev"))
 
@@ -530,39 +850,6 @@ def show_get_started():
     return render_template(
         "admin/show/get_started.html",
         plans=plans,
-    )
-
-@bp.route("/get_started/<int:plan_id>", methods=["GET", "POST"])
-def edit_get_started(plan_id):
-
-    plan = GetStarted.query.get_or_404(plan_id)
-
-    fns = (
-        FunctionImpl.query
-        .order_by(FunctionImpl.real_name)
-        .all()
-    )
-
-    if request.method == "POST":
-        plan.goal = request.form["goal"]
-
-        plan.priority = int(request.form["priority"]) if request.form.get("priority") else None
-
-        fn = (
-            FunctionImpl.query
-            .filter_by(id=request.form["function_impl"])
-            .first_or_404()
-        )
-
-        plan.function_impl = fn
-        db.session.commit()
-
-        return redirect(url_for("admin.show_get_started"))
-
-    return render_template(
-        "admin/actions/edit_get_started.html",
-        plan=plan,
-        fns=fns,
     )
 
 @bp.route("/get_started/add", methods=["GET", "POST"])
@@ -596,10 +883,45 @@ def add_get_started():
         db.session.add(plan)
         db.session.commit()
 
+
+
         return redirect(url_for("admin.show_get_started"))
 
     return render_template(
         "admin/actions/add_get_started.html",
+        fns=fns,
+    )
+
+@bp.route("/get_started/<int:plan_id>", methods=["GET", "POST"])
+def edit_get_started(plan_id):
+
+    plan = GetStarted.query.get_or_404(plan_id)
+
+    fns = (
+        FunctionImpl.query
+        .order_by(FunctionImpl.real_name)
+        .all()
+    )
+
+    if request.method == "POST":
+        plan.goal = request.form["goal"]
+
+        plan.priority = int(request.form["priority"]) if request.form.get("priority") else None
+
+        fn = (
+            FunctionImpl.query
+            .filter_by(id=request.form["function_impl"])
+            .first_or_404()
+        )
+
+        plan.function_impl = fn
+        db.session.commit()
+
+        return redirect(url_for("admin.show_get_started"))
+
+    return render_template(
+        "admin/actions/edit_get_started.html",
+        plan=plan,
         fns=fns,
     )
 

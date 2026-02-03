@@ -49,11 +49,7 @@ API
                         
                         {% set variant = (loop.index0 % 4) + 1 %}
                        
-                        <a href="{{ url_for('docs.show_functions', 
-                                            lvl=lvl, 
-                                            slug=card.slug,
-                                            network="any",
-                                            gpu="any") }}">
+                        <a href="/docs/show_functions/{{ lvl }}/{{ card.id }}/any/any/">
                             <div class="doc-card card-variant-{{ variant }}">
                                 <h3>{{ card.display_name }}</h3>
                                 <p>
@@ -69,8 +65,7 @@ API
 
                         {% set variant = (loop.index0 % 4) + 1 %}
 
-                        <a href="{{ url_for('docs.function_doc', 
-                                            function_id=card.id) }}">
+                        <a href="/docs/function_doc/{{ card.id }}/">
                             <div class="doc-card card-variant-{{ variant }}">
                                 <h3>{{ card.real_name }}</h3>
                                 <p>
@@ -103,9 +98,9 @@ API
               if (!lvlVal) return;
         
               {% if family %}
-                window.location.href = `/docs/${lvlVal}+${family}+${network}+${gpu}`;
+                window.location.href = `/docs/show_functions/${lvlVal}/${family}/${network}/${gpu}/`;
               {% else %}
-                window.location.href = `/docs/${lvlVal}`;
+                window.location.href = `/docs/show_families/${lvlVal}/`;
               {% endif %}
             });
           }
@@ -115,7 +110,7 @@ API
           if (networkSelect) {
             networkSelect.addEventListener("change", (e) => {
               const networkVal = e.target.value;
-              window.location.href = `/docs/${lvl}+${family}+${networkVal}+${gpu}`;
+              window.location.href = `/docs/show_functions/${lvl}/${family}/${networkVal}/${gpu}/`;
             });
           }
         
@@ -123,7 +118,7 @@ API
           if (gpuSelect) {
             gpuSelect.addEventListener("change", (e) => {
               const gpuVal = e.target.value;
-              window.location.href = `/docs/${lvl}+${family}+${network}+${gpuVal}`;
+              window.location.href = `/docs/show_functions/${lvl}/${family}/${network}/${gpuVal}/`;
             });
           }
         {% endif %}
@@ -131,7 +126,7 @@ API
     
     {% if family %}
       <a class="back-to-families"
-         href="{{ url_for('docs.show_families', lvl=lvl) }}">
+         href="/docs/show_families/{{ lvl }}/">
         → Back to Families
       </a>
     {% endif %}
