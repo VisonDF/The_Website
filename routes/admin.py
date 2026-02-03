@@ -883,7 +883,22 @@ def add_get_started():
         db.session.add(plan)
         db.session.commit()
 
+        items = (
+            GetStarted.query
+            .order_by(
+                GetStarted.priority.asc(),
+                GetStarted.id.asc(),
+            )
+            .all()
+        )
 
+        base = BUILD_DIR / "get_started"
+        
+        html = env.get_template("get_started/get_started.html").render(
+            items=items
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "index.html").write_text(html, encoding="utf-8")
 
         return redirect(url_for("admin.show_get_started"))
 
@@ -917,6 +932,14 @@ def edit_get_started(plan_id):
         plan.function_impl = fn
         db.session.commit()
 
+        base = BUILD_DIR / "get_started"
+        
+        html = env.get_template("get_started/get_started.html").render(
+            items=items
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_get_started"))
 
     return render_template(
@@ -931,6 +954,14 @@ def delete_get_started(plan_id):
 
     db.session.delete(plan)
     db.session.commit()
+
+    base = BUILD_DIR / "get_started"
+    
+    html = env.get_template("get_started/get_started.html").render(
+        items=items
+    )
+    base.mkdir(parents=True, exist_ok=True)
+    (base / "index.html").write_text(html, encoding="utf-8")
 
     return redirect(url_for("admin.show_get_started"))
 
@@ -956,6 +987,23 @@ def add_pipeline():
         db.session.add(pipeline)
         db.session.commit()
 
+        pipelines = Pipeline.query.order_by(Pipeline.created_at.desc()).all()
+
+        base = BUILD_DIR / "pipeline"
+        
+        html = env.get_template("pipeline/pipeline_cards.html").render(
+            pipelines=pipelines
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "show_pipeline/index.html").write_text(html, encoding="utf-8")
+
+        out_dir = base / "pipeline" / pipeline.id
+        html = env.get_template("pipeline/pipeline.html").render(
+            pipeline=pipeline
+        )
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "index.html").write_text(html, encoding="utf-8")
+
         return redirect(url_for("admin.show_pipeline"))
 
     return render_template(
@@ -972,6 +1020,23 @@ def edit_pipeline(pipeline_id):
         pipeline.description_html = request.form.get("description_html")
 
         db.session.commit()
+
+        pipelines = Pipeline.query.order_by(Pipeline.created_at.desc()).all()
+
+        base = BUILD_DIR / "pipeline"
+        
+        html = env.get_template("pipeline/pipeline_cards.html").render(
+            pipelines=pipelines
+        )
+        base.mkdir(parents=True, exist_ok=True)
+        (base / "show_pipeline/index.html").write_text(html, encoding="utf-8")
+
+        out_dir = base / "pipeline" / pipeline.id
+        html = env.get_template("pipeline/pipeline.html").render(
+            pipeline=pipeline
+        )
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "pipeline/index.html").write_text(html, encoding="utf-8")
 
         return redirect(url_for("admin.show_pipeline"))
 
@@ -1005,6 +1070,14 @@ def edit_pipeline_datasets(pipeline_id):
 
         db.session.commit()
 
+        base = BUILD_DIR / "pipeline"
+        out_dir = base / "pipeline" / pipeline.id
+        html = env.get_template("pipeline/pipeline.html").render(
+            pipeline=pipeline
+        )
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "pipeline/index.html").write_text(html, encoding="utf-8")
+
         return redirect(
             url_for("admin.show_pipeline")
         )
@@ -1021,6 +1094,16 @@ def delete_pipeline(pipeline_id):
 
     db.session.delete(pipeline)
     db.session.commit()
+
+    base = BUILD_DIR / "pipeline"
+    
+    html = env.get_template("pipeline/pipeline_cards.html").render(
+        pipelines=pipelines
+    )
+    base.mkdir(parents=True, exist_ok=True)
+    (base / "show_pipeline/index.html").write_text(html, encoding="utf-8")
+    out_dir = base / "pipeline" / pipeline.id
+    os.remove(out_dir)
 
     return redirect(url_for("admin.show_pipeline"))
 
