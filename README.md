@@ -339,3 +339,13 @@ ExecStart=/usr/local/bin/publish_datasets.sh
 ```
 
 
+```
+# /etc/sudoers.d/visondf-publish
+
+www-data ALL=(root) NOPASSWD: /bin/systemctl start visondf-publish, \
+                               /bin/systemctl start visondf-publish.service
+
+```
+
+
+
