@@ -28,10 +28,10 @@ Datasets | Admin
               <a href="{{ url_for('admin.edit_dataset', dataset_id=ds.id) }}">
                 edit
               </a>
-            
-              {% set usage = ds.id | dataset_usage_count %}
-            
-              {% if usage == 0 %}
+           
+	      {% set usage = ds | usage_dataset %}
+
+              {% if usage.total == 0 %}
                 <form
                   method="post"
                   action="{{ url_for('admin.delete_dataset', dataset_id=ds.id) }}"

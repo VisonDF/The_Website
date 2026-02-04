@@ -31,7 +31,6 @@ Datasets | Admin
           <th>Name</th>
           <th>Version</th>
           <th>Description</th>
-          <th>Usage</th>
           <th>File</th>
           <th>Created</th>
         </tr>
@@ -47,10 +46,6 @@ Datasets | Admin
               {% else %}
                 <em>—</em>
               {% endif %}
-            </td>
-            <td>
-              {% set usage = ds.id | dataset_usage_count %}
-              {{ usage }} benchmark{{ 's' if usage != 1 else '' }}
             </td>
             <td>
               {% if ds.download_url %}

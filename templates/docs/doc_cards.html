@@ -39,6 +39,8 @@ API
           {% endif %}
         </div>
 
+	{% if cards %}
+
         <!-- Card Grid -->
         <section class="container">
             <div class="card-grid">
@@ -49,7 +51,7 @@ API
                         
                         {% set variant = (loop.index0 % 4) + 1 %}
                        
-                        <a href="/docs/show_functions/{{ lvl }}/{{ card.id }}/any/any/">
+                        <a href="/docs/show_functions/{{ card.id }}/{{ lvl }}/anyany/">
                             <div class="doc-card card-variant-{{ variant }}">
                                 <h3>{{ card.display_name }}</h3>
                                 <p>
@@ -81,14 +83,17 @@ API
             </div>
         </section>
 
+	{% endif %}
+
         <br>
 
         <script>
         {% if family %}
-          const lvl     = "{{ lvl }}";
-          const family  = "{{ family }}";
-          const network = "{{ network }}";
-          const gpu     = "{{ gpu }}";
+          const lvl       = "{{ lvl }}";
+          const family    = "{{ family }}";
+          const network   = "{{ network }}";
+          const gpu       = "{{ gpu }}";
+	  const family_id = "{{ family_id }}"
         {% endif %}
         
           const apiSelect = document.getElementById("api-level-select");
@@ -98,7 +103,7 @@ API
               if (!lvlVal) return;
         
               {% if family %}
-                window.location.href = `/docs/show_functions/${lvlVal}/${family}/${network}/${gpu}/`;
+                window.location.href = `/docs/show_functions/${family_id}/${lvlVal}/${network}${gpu}/`;
               {% else %}
                 window.location.href = `/docs/show_families/${lvlVal}/`;
               {% endif %}
@@ -110,7 +115,7 @@ API
           if (networkSelect) {
             networkSelect.addEventListener("change", (e) => {
               const networkVal = e.target.value;
-              window.location.href = `/docs/show_functions/${lvl}/${family}/${networkVal}/${gpu}/`;
+              window.location.href = `/docs/show_functions/${family_id}/${lvl}/${networkVal}${gpu}/`;
             });
           }
         
@@ -118,7 +123,7 @@ API
           if (gpuSelect) {
             gpuSelect.addEventListener("change", (e) => {
               const gpuVal = e.target.value;
-              window.location.href = `/docs/show_functions/${lvl}/${family}/${network}/${gpuVal}/`;
+              window.location.href = `/docs/show_functions/${family_id}/${lvl}/${network}${gpuVal}/`;
             });
           }
         {% endif %}

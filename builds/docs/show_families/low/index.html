@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <script>
+          (function () {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              document.documentElement.dataset.theme = theme;
+            }
+          })();
+        </script>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+API
+</title>
+        
+        <meta
+            name="description"
+            content="A dataframe engine designed around explicit execution costs, predictability, and control."
+        />
+
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+
+    </head>
+
+    <body>
+        <!-- =========================
+       Top Navigation
+       ========================= -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="logo">
+                    <a href="/">
+                        <img
+                            src="/static/logo_lightmode.svg"
+                            alt="Engine logo"
+                            style="vertical-align: middle; margin-right: 0.5em"
+                            class="logo-img"
+                            height="32"
+                            width="32"
+                            loading="eager"
+                            decoding="async"
+                        />
+                        <span>VisonDF</span>
+                    </a>
+                </div>
+
+                <nav>
+                    <a href="/docs">Docs</a>
+                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                      ☾
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        
+
+
+        <div class="hero-selectors">
+          <!-- Left: API level -->
+          <div class="selectors-left">
+            <select id="api-level-select" class="admin-select">
+              
+                <option value="high">High-level API</option>
+                <option value="low" selected>Low-level API</option>
+              
+            </select>
+          </div>
+        
+          <!-- Right: only if family -->
+          
+        </div>
+
+	
+
+        <!-- Card Grid -->
+        <section class="container">
+            <div class="card-grid">
+
+                
+
+                    
+                        
+                        
+                       
+                        <a href="/docs/show_functions/1/low/anyany/">
+                            <div class="doc-card card-variant-1">
+                                <h3>get_col</h3>
+                                <p>
+                                xyzeeedf
+                                </p>
+                            </div>
+                        </a>
+                    
+                        
+                        
+                       
+                        <a href="/docs/show_functions/4/low/anyany/">
+                            <div class="doc-card card-variant-2">
+                                <h3>qsq</h3>
+                                <p>
+                                qsqs
+                                </p>
+                            </div>
+                        </a>
+                    
+
+                
+
+            </div>
+        </section>
+
+	
+
+        <br>
+
+        <script>
+        
+        
+          const apiSelect = document.getElementById("api-level-select");
+          if (apiSelect) {
+            apiSelect.addEventListener("change", (e) => {
+              const lvlVal = e.target.value;
+              if (!lvlVal) return;
+        
+              
+                window.location.href = `/docs/show_families/${lvlVal}/`;
+              
+            });
+          }
+        
+        
+        </script>
+    
+    
+
+
+
+        <script defer src="/static/js/main.js"></script>
+        <script defer src="/static/prism/prism.min.js"></script>
+        <script defer src="/static/prism/components/prism-clike.min.js"></script>
+        <script defer src="/static/prism/components/prism-c.min.js"></script>
+        <script defer src="/static/prism/components/prism-cpp.min.js"></script>
+        <script defer>
+          window.addEventListener("DOMContentLoaded", () => {
+             if (window.Prism) Prism.highlightAll();
+           });
+        </script>
+
+    </body>
+</html>
+
+
+

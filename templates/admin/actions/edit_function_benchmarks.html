@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dynamic_base.html" %}
 
 {% block title %}
 Edit benchmarks — {{ fn.real_name }} | Admin
@@ -8,9 +8,8 @@ Edit benchmarks — {{ fn.real_name }} | Admin
 
 <main class="admin-page">
 
-
 <a
-  href="{{ url_for('admin.add_function_benchmark', function_id=fn.id) }}"
+  href="{{ url_for('admin.add_benchmark') }}"
   class="admin-link"
 >
   + Add benchmark
@@ -25,12 +24,14 @@ Edit benchmarks — {{ fn.real_name }} | Admin
     </p>
   </header>
 
-  {% if benchmark %}
+  {% if fn.benchmark %}
 <section class="container">
 
   <form method="post" class="admin-form admin-form-wide">
 
-    <input type="hidden" name="benchmark_id" value="{{ benchmark.id }}">
+    <input type="hidden" name="function_impl_id" value="{{ fn.id }}">
+
+    <input type="hidden" name="benchmark_id" value="{{ fn.benchmark.id }}">
 
     <!-- =========================
          Benchmark metadata
@@ -43,7 +44,7 @@ Edit benchmarks — {{ fn.real_name }} | Admin
         <input
           type="text"
           name="title"
-          value="{{ benchmark.title }}"
+          value="{{ fn.benchmark.title }}"
           required
         >
       </div>
@@ -58,11 +59,11 @@ Edit benchmarks — {{ fn.real_name }} | Admin
               — Highlights for Landing Benchmarks —
             </option>
 
-            <option value="yes" {% if benchmark.highlight %} selected {% endif %} >
+            <option value="yes" {% if fn.benchmark.highlighted %} selected {% endif %} >
             Yes
             </option>
 
-            <option value="no" {% if not benchmark.highlight %} selected {% endif %}>
+            <option value="no" {% if not fn.benchmark.highlighted %} selected {% endif %}>
             No
             </option>
 
@@ -97,7 +98,7 @@ Edit benchmarks — {{ fn.real_name }} | Admin
             class="code-textarea code-textarea-large"
             oninput="updatePreview()"
             required
-          >{{ benchmark.description_html }}</textarea>
+          >{{ fn.benchmark.description_html }}</textarea>
 
           <div
             id="description-preview"
@@ -131,7 +132,7 @@ Edit benchmarks — {{ fn.real_name }} | Admin
           -
 
       <a
-        href="{{ url_for('admin.edit_benchmark_datasets', benchmark_id=benchmark.id) }}"
+        href="{{ url_for('admin.edit_benchmark_datasets', bench_id=fn.benchmark.id) }}"
         class="btn-secondary"
       >
         Edit datasets →
@@ -151,11 +152,12 @@ Edit benchmarks — {{ fn.real_name }} | Admin
     
       <form
         method="post"
-        action="{{ url_for('admin.delete_function_bench', function_id=fn.id) }}"
+        action="{{ url_for('admin.delete_benchmark', function_id=fn.id) }}"
         onsubmit="return confirm(
-          'Delete benchmark {{ benchmark.title }}? This cannot be undone.'
+          'Delete benchmark {{ fn.benchmark.title }}? This cannot be undone.'
         );"
       >
+        <input type="hidden" name="function_impl_id" value="{{ fn.id }}">
         <button type="submit" class="btn-danger">
           Delete function benchmark
         </button>

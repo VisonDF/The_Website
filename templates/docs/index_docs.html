@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+API Select
+{% endblock %}
+
+{% block content %}
+
+        <!-- ================================
+     Hero
+================================ -->
+        <section class="hero">
+            <h1>Choose your API level</h1>
+            <p>
+                The engine exposes two interfaces over the same execution core.
+                You decide how explicit you want to be — and when to pay the
+                cost.
+            </p>
+        </section>
+
+        <!-- ================================
+     Choice Section
+================================ -->
+        <section class="container">
+            <div class="dboxes">
+                <!-- High-Level API -->
+
+                <a
+                    href="{{ url_for('docs.show_families', lvl='high') }}"
+                >
+
+                    <div class="box1">
+                        <h2>High-Level API</h2>
+
+                        <p>
+                            Expressive, fluent, and close to analytical pseudocode.
+                            Designed for clarity and fast iteration.
+                        </p>
+
+                        <ul>
+                            <li>Operator overloading</li>
+                            <li>Temporary objects</li>
+                            <li>dplyr-style pipelines</li>
+                            <li>Readable intent</li>
+                        </ul>
+
+                        <p>
+                            <strong>Trade-off:</strong><br />
+                            Small, predictable overhead due to intermediate objects.
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <a
+                    href="{{ url_for('docs.show_families', lvl='low') }}"
+                >
+
+                    <div class="box1">
+                        <h2>Low-Level API</h2>
+
+                        <p>
+                            Explicit operators with direct access to the execution
+                            model. Nothing implicit. Nothing hidden.
+                        </p>
+
+                        <ul>
+                            <li>No operator overloading</li>
+                            <li>No hidden allocations</li>
+                            <li>Explicit execution steps</li>
+                            <li>Metal-friendly</li>
+                        </ul>
+
+                        <p>
+                            <strong>Benefit:</strong><br />
+                            Zero-cost abstractions and full control.
+                        </p>
+
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ================================
+     Footer Note
+================================ -->
+        <section class="container">
+            <p style="opacity: 0.85">
+                Both APIs compile to the same execution engine.<br />
+                <strong
+                    >You choose the abstraction level. The engine stays
+                    honest.</strong
+                >
+            </p>
+        </section>
+        <br/>
+
+{% endblock %}
+
+
+

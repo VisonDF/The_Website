@@ -7,24 +7,17 @@ Pipeline - Article
 {% block content %}
 
 <section class="container">
-
         <!-- Hero -->
         <section class="hero">
             <h1>{{ pipeline.title }}</h1>
             <i>Dataset(s) used is/are available at the end of this section</i>
         </section>
-
         <br>
-
         <!-- Card Grid -->
         <section class="container">
-        
             {{ pipeline.description_html | safe }}
-
         </section>
-
         <br>
-
         {% if pipeline.datasets %}
           <div class="benchmark-datasets">
             <h4>Datasets used</h4>
@@ -39,9 +32,7 @@ Pipeline - Article
             </ul>
           </div>
         {% endif %}
-
 </section>
-
 {% endblock %}
 
 

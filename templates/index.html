@@ -1,0 +1,147 @@
+{% extends "static_base.html" %}
+{% block content %}
+
+        <!-- =========================
+       Hero
+       ========================= -->
+        <section class="hero">
+            <h1>A dataframe engine built for control.</h1>
+            <div class="rotator">
+                <p class="rotator-sentence active"><i>Decide when you pay the cost — and why.</i></p>
+                <p class="rotator-sentence"><i>Sentence 2.</i></p>
+                <p class="rotator-sentence"><i>Sentence 3.</i></p>
+            </div>
+            <div class="hero-rotator-indicator">
+              <span class="active"></span>
+              <span></span>
+              <span></span>
+            </div>
+        </section>
+
+        <section class="split">
+        
+          <!-- Left: explanatory text -->
+          <section class="split-text">
+
+              <p><b><i>Designed for engineers who need predictable performance, explicit execution, and full control over data pipelines.</i></b></p>
+
+            <p>
+             At its core, VisonDF is a C++ execution engine that exposes explicit control over evaluation, memory, and parallelism. It combines a hybrid lazy–eager execution model with full user control over execution cost and memory behavior. Every operation is designed to scale: multithreaded by default, vectorized across SSE, AVX2, and AVX-512 when available, and extensible down to the kernel level.            </p>
+            <p>
+              Nothing is hidden, nothing is forced ⇒ you decide what runs, when it
+              runs, and what it costs.
+            </p>
+          </section>
+        
+          <!-- Right: buttons + code -->
+          <section class="split-code">
+        
+            <div class="code-panel">
+              <div class="code-actions">
+                <a class="btn primary" href="get_started">Get Started</a>
+                <a class="btn" href="benchmark">Benchmarks</a>
+                <a class="btn" href="https://github.com/visonDF/visonDF">GitHub</a>
+              </div>
+       
+              <a href="{{ url_for('docs.index') }}" class="code-rotator-link">
+              <div class="code-rotator">
+            
+                <pre class="code-block active">
+                <code class="language-cpp">
+    #include &lt;iostream&gt;
+    #include &lt;vector&gt;
+    
+    int main() {
+        std::vector&lt;int&gt; values = {1, 2, 3, 4};
+        for (int v : values) {
+            std::cout &lt;&lt; v &lt;&lt; std::endl;
+        }
+    }
+                </code>
+                </pre>
+            
+                <pre class="code-block">
+                <code class="language-cpp">
+    auto df = vdf::read_csv("data.csv");
+    
+    auto result = df
+        .filter(col("value") &gt; 10)
+        .group_by("category")
+        .agg(sum("value"))
+        .materialize();
+                </code>
+                </pre>
+            
+                <pre class="code-block">
+                <code class="language-cpp">
+    auto plan = df.plan();
+    plan.optimize();
+    plan.execute();
+                </code>
+                </pre>
+
+                <div class="rotator-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+
+              </div>
+            </a>            
+
+            </div>
+          </section>
+        
+        </section>
+
+        <!-- =========================
+       Benchmarks
+       ========================= -->
+        <section id="benchmarks">
+            <h2>Benchmarks</h2>
+            <p>
+                Benchmarks are designed to measure predictability, not just
+                throughput.
+            </p>
+            <a href="benchmark">benchmarks →</a>
+        </section>
+
+        <!-- =========================
+       Pipelines
+       ========================= -->
+        <section id="pipelines">
+            <h2>Pipelines</h2>
+            <p>
+                Pipelines is a collection of real data workloads executed with visonDF, designed to expose performance trade-offs and give users a concrete mental model of how and when execution costs are paid.            
+            </p>
+            <a href="pipeline">pipelines →</a>
+        </section>
+
+        <!-- =========================
+       Development
+       ========================= -->
+        <section id="development">
+            <h2>Development</h2>
+            <p>
+            Roadmap &amp; Architecture 
+            </p>
+            <a href="dev">development →</a>
+        </section>
+
+<script>
+  const sentences = document.querySelectorAll(".rotator-sentence");
+  let index = 0;
+
+  setInterval(() => {
+    sentences[index].classList.remove("active");
+    index = (index + 1) % sentences.length;
+    sentences[index].classList.add("active");
+  }, 5000);
+</script>
+
+{% endblock %}
+
+
+
+
+

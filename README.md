@@ -77,22 +77,22 @@ gunicorn -w 4 -b 0.0.0.0:8089 run:app
 Or making it persistent
 
 ```
+
 [Unit]
 Description=VisonDF Website (Gunicorn)
 After=network.target
 
 [Service]
-User=root
+User=www-data
 Group=www-data
 
-WorkingDirectory=/root/The_Website
-Environment="PATH=/root/The_Website/menv/bin"
-Environment="FLASK_ENV=production"
+WorkingDirectory=/var/www/visondf/The_Website
 
-ExecStart=/root/The_Website/menv/bin/gunicorn \
-    --worker-class gthread \
+Environment="FLASK_ENV=production"
+EnvironmentFile=/var/www/visondf/The_Website/.env
+
+ExecStart=/var/www/visondf/The_Website/menv/bin/gunicorn \
     --workers 2 \
-    --threads 8 \
     --bind 127.0.0.1:8089 \
     run:app
 
@@ -102,15 +102,15 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 
+
 ```
 
 ```
 mkdir -p /var/www/visondf
 mv /root/The_Website /var/www/visondf/
 chown -R www-data:www-data /var/www/visondf
-ls -ld /var/www /var/www/visondf /var/www/visondf/The_Website
-expected:
-drwxr-xr-x www-data www-data /var/www/visondf
+chown -R www-data:www-data /var/www/visondf/The_Website/builds
+chmod -R u+rwX /var/www/visondf/The_Website/builds
 ```
 
 good dfengine.conf
@@ -141,23 +141,64 @@ server {
     ssl_session_tickets off;
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    location / {
-        proxy_pass http://backend;
-        proxy_http_version 1.1;
-        proxy_set_header Connection "";
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
+    # -------------------------
+    # STATIC SITE (public pages)
+    # -------------------------
+    root /var/www/visondf/The_Website/builds;
+    index index.html;
 
-        proxy_connect_timeout 2s;
-        proxy_read_timeout 30s;
+    location / {
+        try_files $uri $uri/ =404;
     }
 
+    # -------------------------
+    # STATIC ASSETS
+    # -------------------------
     location /static/ {
         alias /var/www/visondf/The_Website/static/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
+
+    # -------------------------
+    # ADMIN (Flask / Gunicorn)
+    # -------------------------
+    location /admin/ {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+
+    location /login {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+
+    location /logout {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+
 
 }
 
@@ -258,14 +299,6 @@ http {
 
 ```
 
-Redis setup:
-
-```
-
-sudo apt install redis-server
-sudo systemctl enable redis-server
-
-```
 
 
 

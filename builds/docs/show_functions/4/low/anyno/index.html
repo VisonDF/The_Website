@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <script>
+          (function () {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              document.documentElement.dataset.theme = theme;
+            }
+          })();
+        </script>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+API
+</title>
+        
+        <meta
+            name="description"
+            content="A dataframe engine designed around explicit execution costs, predictability, and control."
+        />
+
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+
+    </head>
+
+    <body>
+        <!-- =========================
+       Top Navigation
+       ========================= -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="logo">
+                    <a href="/">
+                        <img
+                            src="/static/logo_lightmode.svg"
+                            alt="Engine logo"
+                            style="vertical-align: middle; margin-right: 0.5em"
+                            class="logo-img"
+                            height="32"
+                            width="32"
+                            loading="eager"
+                            decoding="async"
+                        />
+                        <span>VisonDF</span>
+                    </a>
+                </div>
+
+                <nav>
+                    <a href="/docs">Docs</a>
+                    <a href="https://github.com/visonDF/visonDF">GitHub</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                      ☾
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        
+
+
+        <div class="hero-selectors">
+          <!-- Left: API level -->
+          <div class="selectors-left">
+            <select id="api-level-select" class="admin-select">
+              
+                <option value="high">High-level API</option>
+                <option value="low" selected>Low-level API</option>
+              
+            </select>
+          </div>
+        
+          <!-- Right: only if family -->
+          
+            <div class="selectors-right">
+              <select id="network-select" class="admin-select">
+                <option value="any"  selected >Network: Any</option>
+                <option value="yes" >Network: Yes</option>
+                <option value="no" >Network: No</option>
+              </select>
+        
+              <select id="gpu-select" class="admin-select">
+                <option value="any" >GPU: Any</option>
+                <option value="yes" >GPU: Yes</option>
+                <option value="no"  selected >GPU: No</option>
+              </select>
+            </div>
+          
+        </div>
+
+	
+
+        <br>
+
+        <script>
+        
+          const lvl       = "low";
+          const family    = "True";
+          const network   = "any";
+          const gpu       = "no";
+	  const family_id = "4"
+        
+        
+          const apiSelect = document.getElementById("api-level-select");
+          if (apiSelect) {
+            apiSelect.addEventListener("change", (e) => {
+              const lvlVal = e.target.value;
+              if (!lvlVal) return;
+        
+              
+                window.location.href = `/docs/show_functions/${family_id}/${lvlVal}/${network}${gpu}/`;
+              
+            });
+          }
+        
+        
+          const networkSelect = document.getElementById("network-select");
+          if (networkSelect) {
+            networkSelect.addEventListener("change", (e) => {
+              const networkVal = e.target.value;
+              window.location.href = `/docs/show_functions/${family_id}/${lvl}/${networkVal}${gpu}/`;
+            });
+          }
+        
+          const gpuSelect = document.getElementById("gpu-select");
+          if (gpuSelect) {
+            gpuSelect.addEventListener("change", (e) => {
+              const gpuVal = e.target.value;
+              window.location.href = `/docs/show_functions/${family_id}/${lvl}/${network}${gpuVal}/`;
+            });
+          }
+        
+        </script>
+    
+    
+      <a class="back-to-families"
+         href="/docs/show_families/low/">
+        → Back to Families
+      </a>
+    
+
+
+
+        <script defer src="/static/js/main.js"></script>
+        <script defer src="/static/prism/prism.min.js"></script>
+        <script defer src="/static/prism/components/prism-clike.min.js"></script>
+        <script defer src="/static/prism/components/prism-c.min.js"></script>
+        <script defer src="/static/prism/components/prism-cpp.min.js"></script>
+        <script defer>
+          window.addEventListener("DOMContentLoaded", () => {
+             if (window.Prism) Prism.highlightAll();
+           });
+        </script>
+
+    </body>
+</html>
+
+
+

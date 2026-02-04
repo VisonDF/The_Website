@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dynamic_base.html" %}
 
 {% block title %}
 Edit function — {{ fn.real_name }} | Admin
@@ -180,7 +180,7 @@ Edit function — {{ fn.real_name }} | Admin
     -
 
       <a
-        href="{{ url_for('admin.edit_bench', function_id=fn.id) }}"
+        href="{{ url_for('admin.edit_benchmark', function_impl_id=fn.id) }}"
         class="btn-secondary"
       >
         Edit benchmarks →

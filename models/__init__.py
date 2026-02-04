@@ -6,8 +6,10 @@ from .benchmark_dataset import BenchmarkDataset
 from .get_started import GetStarted
 from .pipeline_dataset import PipelineDataset
 from .pipeline import Pipeline
+from .admin_user import AdminUser
 
 __all__ = [
+    "AdminUser"
     "Dataset",
     "FunctionFamily",
     "FunctionImpl",
