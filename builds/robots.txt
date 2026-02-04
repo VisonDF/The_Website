@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Block admin & auth
+Disallow: /admin/
+Disallow: /login
+Disallow: /logout
+
+# Block internal build artifacts (if any)
+Disallow: /_internal/
+Disallow: /_private/
+
+# Optional: block query-heavy endpoints
+Disallow: /*?
+
+Sitemap: https://visondf.dev/sitemap.xml
