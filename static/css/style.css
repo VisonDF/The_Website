@@ -1653,4 +1653,42 @@ code, pre {
 .doc-card-article.card-variant-3 { background-color: var(--card-3); }
 .doc-card-article.card-variant-4 { background-color: var(--card-4); }
 
+.link-preview-popup {
+  position: fixed;
+  z-index: 9999;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow: auto;
+
+  background: var(--bg, #fff);
+  color: var(--fg, #111);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+
+  box-shadow: 0 25px 70px rgba(0,0,0,.45);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.link-preview-popup pre {
+  font-size: 0.85em;
+}
+
+.link-preview-popup a {
+  pointer-events: none; /* prevent recursion */
+}
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted, #777);
+}
+
+.architecture-note {
+  opacity: 0.8;
+}
+
+
 

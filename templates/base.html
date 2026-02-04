@@ -58,7 +58,9 @@
             </div>
         </header>
 
+        <main id="page-content">
         {% block content %} {% endblock %}
+        </main>
 
         <script defer src="/static/js/main.js"></script>
         <script defer src="/static/prism/prism.min.js"></script>
@@ -70,6 +72,12 @@
              if (window.Prism) Prism.highlightAll();
            });
         </script>
+
+<footer class="site-footer">
+  <span class="architecture-note">
+    Statically served. Dynamically authored.
+  </span>
+</footer>
 
     </body>
 </html>
