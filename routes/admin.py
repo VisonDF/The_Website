@@ -30,6 +30,8 @@ import os
 import shutil
 from datetime import datetime
 
+import subprocess
+
 # -------------------------------------------------------------------
 # Jinja environment (you use it to render templates to static files)
 # -------------------------------------------------------------------
@@ -469,6 +471,8 @@ def edit_dataset(dataset_id: int):
 
 @bp.route("/datasets", methods=["GET", "POST"])
 def add_datasets():
+    UPLOAD_ROOT = os.path.join(current_app.root_path, "uploads", "datasets")
+
     if request.method == "POST":
         name = request.form["name"]
         version = request.form["version"]
@@ -480,12 +484,13 @@ def add_datasets():
 
         filename = secure_filename(file.filename)
 
-        dataset_dir = os.path.join(current_app.root_path, "static", "datasets")
-        os.makedirs(dataset_dir, exist_ok=True)
+        # Ensure writable upload directory exists
+        os.makedirs(UPLOAD_ROOT, exist_ok=True)
 
-        filepath = os.path.join(dataset_dir, filename)
+        filepath = os.path.join(UPLOAD_ROOT, filename)
         file.save(filepath)
 
+        # Public URL remains stable
         download_url = f"/static/datasets/{filename}"
 
         dataset = Dataset(
@@ -497,32 +502,53 @@ def add_datasets():
         db.session.add(dataset)
         db.session.commit()
 
+        subprocess.Popen(
+            ["sudo", "/bin/systemctl", "start", "visondf-publish.service"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
         return redirect(url_for("admin.show_datasets"))
 
     datasets = Dataset.query.order_by(Dataset.created_at.desc()).all()
-    return render_template("admin/actions/add_datasets.html", datasets=datasets)
-
+    return render_template(
+        "admin/actions/add_datasets.html",
+        datasets=datasets
+    )
 
 @bp.route("/datasets/<int:dataset_id>/delete", methods=["POST"])
 def delete_dataset(dataset_id: int):
     dataset = Dataset.query.get_or_404(dataset_id)
 
     usage_count = (
-        BenchmarkDataset.query.filter_by(dataset_id=dataset.id).count()
+        BenchmarkDataset.query
+        .filter_by(dataset_id=dataset.id)
+        .count()
     )
     if usage_count > 0:
         abort(400, "Dataset is still used by benchmarks")
 
+    # Delete from authoring storage only
     if dataset.download_url:
-        file_path = os.path.join(
+        filename = os.path.basename(dataset.download_url)
+        upload_path = os.path.join(
             current_app.root_path,
-            dataset.download_url.lstrip("/"),
+            "uploads",
+            "datasets",
+            filename,
         )
-        if os.path.exists(file_path):
-            os.remove(file_path)
+
+        if os.path.exists(upload_path):
+            os.remove(upload_path)
 
     db.session.delete(dataset)
     db.session.commit()
+
+    subprocess.Popen(
+        ["sudo", "/bin/systemctl", "start", "visondf-publish.service"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
     return redirect(url_for("admin.show_datasets"))
 
@@ -872,9 +898,6 @@ def delete_pipeline(pipeline_id: int):
     rebuild_pipeline_pages(None)
 
     return redirect(url_for("admin.show_pipeline"))
-
-
-
 
 # -------------------------------------------------------------------
 # Benchmark endpoints (relationship anchored; no show_functions rebuild)

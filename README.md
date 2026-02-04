@@ -312,7 +312,30 @@ http {
 
 ```
 
+rsync script
+
+```
+#!/usr/bin/env bash
+set -euo pipefail
+
+SRC="/var/www/visondf/The_Website/uploads/datasets/"
+DST="/var/www/visondf/The_Website/static/datasets/"
+
+rsync -a --delete "$SRC" "$DST"
+
+```
+
+service for the rsync oneshot:
 
 
+```
+[Unit]
+Description=Publish VisonDF datasets
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/publish_datasets.sh
+
+```
 
 
