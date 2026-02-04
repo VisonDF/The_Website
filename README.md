@@ -111,6 +111,8 @@ mv /root/The_Website /var/www/visondf/
 chown -R www-data:www-data /var/www/visondf
 chown -R www-data:www-data /var/www/visondf/The_Website/builds
 chmod -R u+rwX /var/www/visondf/The_Website/builds
+sudo chown -R www-data:www-data builds
+sudo chmod -R 755 builds
 ```
 
 good dfengine.conf
@@ -295,6 +297,17 @@ http {
 
     include /etc/nginx/conf.d/*.conf;
     include /etc/nginx/sites-enabled/*;
+
+    open_file_cache max=50000 inactive=30s;
+    open_file_cache_valid 60s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors on;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+
 }
 
 ```
