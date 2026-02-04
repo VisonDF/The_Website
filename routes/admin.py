@@ -28,6 +28,7 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 import os
 import shutil
+from datetime import datetime
 
 # -------------------------------------------------------------------
 # Jinja environment (you use it to render templates to static files)
@@ -42,6 +43,7 @@ env = Environment(
 # -------------------------------------------------------------------
 BUILD_DIR = Path("builds")
 BUILD_DIR.mkdir(exist_ok=True)
+BASE_URL = "https://visondf.dev"
 
 DOCS_DIR = BUILD_DIR / "docs"  # builds/docs/...
 
@@ -81,6 +83,55 @@ def _bool_yes(value: Optional[str]) -> bool:
 # -------------------------------------------------------------------
 # Rebuild helpers (THIS encodes your dependency graph)
 # -------------------------------------------------------------------
+
+def rebuild_sitemap() -> None:
+    urls = []
+
+    # 1. Homepage
+    urls.append({
+        "loc": f"{BASE_URL}/",
+        "priority": "1.0",
+        "changefreq": "weekly",
+    })
+
+    # 2. Walk all static HTML pages
+    for path in BUILD_DIR.rglob("*.html"):
+        if path.name == "index.html":
+            rel = path.parent.relative_to(BUILD_DIR)
+            url = f"{BASE_URL}/{rel}/" if str(rel) != "." else f"{BASE_URL}/"
+        else:
+            rel = path.relative_to(BUILD_DIR)
+            url = f"{BASE_URL}/{rel}"
+
+        # Exclusions
+        if "/admin/" in url:
+            continue
+
+        urls.append({
+            "loc": url,
+            "priority": "0.6",
+            "changefreq": "monthly",
+        })
+
+    today = datetime.utcnow().date().isoformat()
+
+    xml = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+
+    for u in urls:
+        xml.append("  <url>")
+        xml.append(f"    <loc>{u['loc']}</loc>")
+        xml.append(f"    <lastmod>{today}</lastmod>")
+        xml.append(f"    <changefreq>{u['changefreq']}</changefreq>")
+        xml.append(f"    <priority>{u['priority']}</priority>")
+        xml.append("  </url>")
+
+    xml.append("</urlset>")
+
+    (BUILD_DIR / "sitemap.xml").write_text("\n".join(xml), encoding="utf-8")
+
 def rebuild_function_page(fn: FunctionImpl) -> None:
     """
     Rebuild ONLY the function detail page:
@@ -112,6 +163,7 @@ def rebuild_function_page(fn: FunctionImpl) -> None:
 
     out = DOCS_DIR / "function_doc" / str(fn.id) / "index.html"
     _write_html(out, html)
+    rebuild_sitemap()
 
 
 def rebuild_show_functions_for(fn: FunctionImpl) -> None:
@@ -177,6 +229,8 @@ def rebuild_show_functions_for(fn: FunctionImpl) -> None:
             out_dir = base / f"{network}{gpu}"
             out_dir.mkdir(parents=True, exist_ok=True)
             (out_dir / "index.html").write_text(html, encoding="utf-8")
+    rebuild_sitemap()
+
 
 def rebuild_family_listings() -> None:
     """
@@ -194,7 +248,7 @@ def rebuild_family_listings() -> None:
         )
         out = out_base / lvl / "index.html"
         _write_html(out, html)
-
+    rebuild_sitemap()
 
 def rebuild_get_started_index() -> None:
     """
@@ -207,7 +261,7 @@ def rebuild_get_started_index() -> None:
     html = env.get_template("get_started/get_started.html").render(items=items)
     out = BUILD_DIR / "get_started" / "index.html"
     _write_html(out, html)
-
+    rebuild_sitemap()
 
 def rebuild_dev_pages(article_id: Optional[int] = None) -> None:
     """
@@ -225,7 +279,7 @@ def rebuild_dev_pages(article_id: Optional[int] = None) -> None:
         if article is not None:
             art_html = env.get_template("development/dev.html").render(article=article)
             _write_html(BUILD_DIR / "dev" / "dev" / str(article.id) / "index.html", art_html)
-
+    rebuild_sitemap()
 
 def rebuild_pipeline_pages(pipeline_id: Optional[int] = None) -> None:
     """
@@ -243,6 +297,7 @@ def rebuild_pipeline_pages(pipeline_id: Optional[int] = None) -> None:
         if pipeline is not None:
             page_html = env.get_template("pipeline/pipeline.html").render(pipeline=pipeline)
             _write_html(BUILD_DIR / "pipeline" / "pipeline" / str(pipeline.id) / "index.html", page_html)
+    rebuild_sitemap()
 
 def rebuild_highlight_bench() -> None:
 
@@ -255,6 +310,7 @@ def rebuild_highlight_bench() -> None:
 
     html = env.get_template("benchmark/benchmark.html").render(benchs=benchs)
     _write_html(BUILD_DIR / "benchmark" / "index.html", html)
+    rebuild_sitemap()
 
 
 # -------------------------------------------------------------------
