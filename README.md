@@ -128,6 +128,26 @@ server {
 
     listen 80;
     server_name visondf.dev www.visondf.dev;
+
+    # Allow Cloudflare only
+    allow 173.245.48.0/20;
+    allow 103.21.244.0/22;
+    allow 103.22.200.0/22;
+    allow 103.31.4.0/22;
+    allow 141.101.64.0/18;
+    allow 108.162.192.0/18;
+    allow 190.93.240.0/20;
+    allow 188.114.96.0/20;
+    allow 197.234.240.0/22;
+    allow 198.41.128.0/17;
+    allow 162.158.0.0/15;
+    allow 104.16.0.0/13;
+    allow 104.24.0.0/14;
+    allow 172.64.0.0/13;
+    allow 131.0.72.0/22;
+    
+    deny all;
+
     return 301 https://$host$request_uri;
 }
 
@@ -200,7 +220,6 @@ server {
         proxy_connect_timeout 2s;
         proxy_read_timeout 30s;
     }
-
 
 }
 
@@ -344,6 +363,13 @@ ExecStart=/usr/local/bin/publish_datasets.sh
 
 www-data ALL=(root) NOPASSWD: /bin/systemctl start visondf-publish, \
                                /bin/systemctl start visondf-publish.service
+
+```
+
+test latency:
+
+```
+❯ curl -o /dev/null -s -w "DNS: %{time_namelookup}s\nTCP: %{time_connect}s\nTLS: %{time_appconnect}s\nTTFB: %{time_starttransfer}s\nTotal: %{time_total}s\n" https://visondf.dev
 
 ```
 
