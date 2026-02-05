@@ -443,6 +443,9 @@ def delete_function_impl(function_id: int):
     # Remove the function page folder
     _rm_tree(DOCS_DIR / "function_doc" / str(function_id))
 
+    rebuild_get_started_index()
+    rebuild_highlight_bench()
+
     return redirect(url_for("admin.show_function_impl"))
 
 
@@ -898,6 +901,9 @@ def delete_pipeline(pipeline_id: int):
     rebuild_pipeline_pages(None)
 
     return redirect(url_for("admin.show_pipeline"))
+
+
+
 
 # -------------------------------------------------------------------
 # Benchmark endpoints (relationship anchored; no show_functions rebuild)
