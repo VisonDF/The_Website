@@ -69,18 +69,21 @@ bp = Blueprint("admin", __name__)
 # -------------------------------------------------------------------
 # Small helpers
 # -------------------------------------------------------------------
+
 def _write_html(path: Path, html: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(html, encoding="utf-8")
 
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(html, encoding="utf-8")
+
+    # atomic on POSIX
+    tmp.replace(path)
 
 def _rm_tree(path: Path) -> None:
     shutil.rmtree(path, ignore_errors=True)
 
-
 def _bool_yes(value: Optional[str]) -> bool:
     return (value or "").strip().lower() == "yes"
-
 
 # -------------------------------------------------------------------
 # Rebuild helpers (THIS encodes your dependency graph)
