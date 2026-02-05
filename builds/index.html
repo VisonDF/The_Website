@@ -21,7 +21,12 @@
             content="A dataframe engine designed around explicit execution costs, predictability, and control."
         />
 
-        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/critical_style.css">
+        <link rel="preload" href="/static/css/style.css" as="style" onload="this.rel='stylesheet'"> 
+        <noscript> 
+            <link rel="stylesheet" href="/static/css/style.css"> 
+        </noscript>
+
         <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 
     </head>
