@@ -1684,9 +1684,11 @@ code, pre {
   text-align: center;
   font-size: 0.85rem;
   color: var(--text-muted, #777);
+  text-align: center;
 }
 
 .architecture-note {
+  display: inline-block;
   opacity: 0.8;
 }
 
