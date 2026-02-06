@@ -51,7 +51,7 @@ API
                         
                         {% set variant = (loop.index0 % 4) + 1 %}
                        
-                        <a href="/docs/show_functions/{{ card.id }}/{{ lvl }}/anyany/">
+                        <a rel="prefetch" href="/docs/show_functions/{{ card.id }}/{{ lvl }}/anyany/">
                             <div class="doc-card card-variant-{{ variant }}">
                                 <h3>{{ card.display_name }}</h3>
                                 <p>
@@ -67,7 +67,7 @@ API
 
                         {% set variant = (loop.index0 % 4) + 1 %}
 
-                        <a href="/docs/function_doc/{{ card.id }}/">
+                        <a rel="prefetch" href="/docs/function_doc/{{ card.id }}/">
                             <div class="doc-card card-variant-{{ variant }}">
                                 <h3>{{ card.real_name }}</h3>
                                 <p>
@@ -131,6 +131,7 @@ API
     
     {% if family %}
       <a class="back-to-families"
+         rel="prefetch"
          href="/docs/show_families/{{ lvl }}/">
         → Back to Families
       </a>

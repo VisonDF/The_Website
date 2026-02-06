@@ -16,7 +16,7 @@ Data Pipeline
             <div class="card-grid">
                 {% for pipeline in pipelines %}
                     {% set variant = (loop.index0 % 4) + 1 %}
-		    <a href="/pipeline/pipeline/{{ pipeline.id }}">
+		    <a rel="prefetch" href="/pipeline/pipeline/{{ pipeline.id }}">
                         <div class="doc-card-article card-variant-{{ variant }}">
                             <h3>{{ pipeline.title }}</h3>
                             <p>
