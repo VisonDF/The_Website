@@ -44,7 +44,7 @@
         <header class="topbar">
             <div class="topbar-inner">
                 <div class="logo">
-                    <a href="/">
+                    <a rel="prefetch" href="/">
                         <img
                             src="/static/logo_lightmode.svg"
                             alt="Engine logo"
@@ -60,7 +60,7 @@
                 </div>
 
                 <nav>
-                    <a href="/docs">Docs</a>
+                    <a rel="prefetch" href="/docs">Docs</a>
                     <a href="https://github.com/visonDF/visonDF">GitHub</a>
                     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                       ☾
@@ -74,6 +74,7 @@
         </main>
 
         <script defer src="/static/js/main.js"></script>
+        <script defer src="/static/js/router.js"></script>
         <script defer src="/static/prism/prism.min.js"></script>
         <script defer src="/static/prism/components/prism-clike.min.js"></script>
         <script defer src="/static/prism/components/prism-c.min.js"></script>
