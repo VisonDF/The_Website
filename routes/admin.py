@@ -1003,6 +1003,7 @@ def edit_benchmark_datasets(bench_id):
 
         # Dataset changes affect ONLY the function page
         rebuild_function_page(fn)
+        rebuild_highlight_bench()
 
         flash("Benchmark datasets updated.", "success")
         return redirect(url_for("admin.show_benchs"))
@@ -1027,9 +1028,10 @@ def delete_benchmark():
         db.session.commit()
 
     rebuild_function_page(fn)
+    rebuild_highlight_bench()
 
     flash("Benchmark deleted.", "success")
-    return redirect(url_for("admin.edit_function_impl", function_id=fn.id))
+    return redirect(url_for("admin.show_benchs", function_id=fn.id))
 
 
 
