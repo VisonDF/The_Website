@@ -340,7 +340,7 @@ set -euo pipefail
 SRC="/var/www/visondf/The_Website/uploads/datasets/"
 DST="/var/www/visondf/The_Website/static/datasets/"
 
-rsync -a --delete "$SRC" "$DST"
+rsync -a --delete --delay-updates "$SRC" "$DST"
 
 ```
 
